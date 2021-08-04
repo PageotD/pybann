@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pybann"
+version = "0.1.0"
+description = "Basic Artificial Neural Network"
+authors = ["Damien Pageot <74134372+PageotD@users.noreply.github.com>"]
+license = "BSD 3-Clause"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.21.1"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.9.2"
+pylint = "^2.9.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
