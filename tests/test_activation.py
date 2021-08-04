@@ -1,5 +1,4 @@
 import unittest
-import numpy as np
 from pybann.activation import sigmoid, dsigmoid
 
 class test_activation(unittest.TestCase):

@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `pybann/activation.py` containing activation functions (sigmoid only for now)
 - `tests/test_activation.py`
+- `pybann/network.py` containing network methods
+- `tests/test_network.py`
 
 ### Changed
 

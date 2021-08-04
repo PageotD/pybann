@@ -6,14 +6,14 @@ artificial neural network.
 """
 
 # Import modules
-import numpy as np
+import math as m
 
 
 def sigmoid(x):
     """
     The sigmoid function.
     """
-    return 1.0 / (1.0 + np.exp(-x))
+    return 1.0 / (1.0 + m.exp(-x))
 
 def dsigmoid(x):
     """
