@@ -6,6 +6,7 @@ A module to define the artificial neural network.
 
 # Import modules
 import numpy as np
+from .activation import sigmoid
 
 class Network:
 
@@ -20,5 +21,13 @@ class Network:
         self.nLayers = len(size)
 
         # Initialize weights and biaises
-        self.weights = [ np.random.standard_normal(n) for n in size[1:]]
-        self.biaises = [ np.random.standard_normal((n, m)) for n, m in zip(size[1:], size[:-1])]
+        self.biaises = [ np.random.standard_normal(n) for n in size[1:]]
+        self.weights = [ np.random.standard_normal(m) for m in zip(size[1:], size[:-1])]
+
+    def feedforward(self, nodeValues):
+        """
+        """
+        for weights, biaises in zip(self.weights, self.biaises):
+            nodeValues = sigmoid(np.dot(weights, nodeValues) + biaises)
+
+        return nodeValues
