@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from pybann import Network
 
 class test_activation_parameters(unittest.TestCase):
@@ -38,10 +39,6 @@ class test_activation_parameters(unittest.TestCase):
 
         # Check biaises
         self.assertEqual(len(network.biaises), 2)
-        self.assertEqual(len(network.biaises[0]), 5)
-        self.assertEqual(len(network.biaises[1]), 4)
-        for i in range(len(network.biaises[0])):
-            self.assertEqual(len(network.biaises[0][i]), 3)
-        for i in range(len(network.biaises[1])):
-            self.assertEqual(len(network.biaises[1][i]), 5)
+        self.assertTupleEqual(np.shape(network.biaises[0]), (5, 3))
+        self.assertTupleEqual(np.shape(network.biaises[1]), (4, 5))
         

@@ -7,8 +7,6 @@ A module to define the artificial neural network.
 # Import modules
 import numpy as np
 
-import random
-
 class Network:
 
     def __init__(self, size):
@@ -22,5 +20,5 @@ class Network:
         self.nLayers = len(size)
 
         # Initialize weights and biaises
-        self.weights = [ [random.gauss(0., 1.) for i in range(n)] for n in size[1:]]
-        self.biaises = [ [ [random.gauss(0., 1.) for i in range(m)] for j in range(n)] for n, m in zip(size[1:], size[:-1])]
+        self.weights = [ np.random.standard_normal(n) for n in size[1:]]
+        self.biaises = [ np.random.standard_normal((n, m)) for n, m in zip(size[1:], size[:-1])]
