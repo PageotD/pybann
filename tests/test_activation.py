@@ -1,5 +1,5 @@
 import unittest
-from pybann.activation import sigmoid, dsigmoid
+from pybann.activation import sigmoid
 
 class test_activation(unittest.TestCase):
 
@@ -25,4 +25,4 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(dsigmoid(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(sigmoid(a[i], deriv=True), o[i], delta=1.e-7)

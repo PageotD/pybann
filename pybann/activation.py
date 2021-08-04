@@ -9,14 +9,12 @@ artificial neural network.
 import numpy as np
 
 
-def sigmoid(x):
+def sigmoid(x, deriv=False):
     """
-    The sigmoid function.
+    The sigmoid function and its derivative.
     """
-    return 1.0 / (1.0 + np.exp(-x))
-
-def dsigmoid(x):
-    """
-    The sigmoid derivative.
-    """
-    return sigmoid(x) * (1.0- sigmoid(x))
+    sig = 1.0 / (1.0 + np.exp(-x))
+    if not deriv:
+        return sig
+    else:
+        return sig * (1.0 - sig)

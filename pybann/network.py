@@ -6,7 +6,7 @@ A module to define the artificial neural network.
 
 # Import modules
 import numpy as np
-from .activation import sigmoid, dsigmoid
+from .activation import sigmoid
 
 class Network:
 
@@ -74,12 +74,12 @@ class Network:
             activations.append(activation)
         
         # Backward
-        delta = (activations[-1] - outValues) * dsigmoid(wsvectors[-1])
+        delta = (activations[-1] - outValues) * sigmoid(wsvectors[-1], deriv=True)
         nablaW[-1] = np.dot(delta, activations[-2].transpose())
         nablaB[-1] = delta
         for iLayer in range(2, self.nLayers):
             wsvector = wsvectors[-iLayer]
-            delta = (self.weights[-iLayer+1].transpose(), delta) * dsigmoid(wsvector)
+            delta = (self.weights[-iLayer+1].transpose(), delta) * sigmoid(wsvector, deriv=True)
             nablaW[-iLayer] = np.dot(delta, activations[-iLayer-1].transpose())
             nablaB[-iLayer] = delta
 
