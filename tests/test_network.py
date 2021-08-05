@@ -16,7 +16,7 @@ class test_activation_parameters(unittest.TestCase):
         self.assertTupleEqual(network.size, size) 
         self.assertEqual(network.nLayers, 3)
         
-    def test_initialization_biaises(self):
+    def test_initialization_biases(self):
 
         # Define the size of the network
         size = (3, 5, 4)
@@ -25,9 +25,9 @@ class test_activation_parameters(unittest.TestCase):
         network = Network(size)
 
         # Check weights
-        self.assertEqual(len(network.biaises), 2)
-        self.assertEqual(len(network.biaises[0]), 5)
-        self.assertEqual(len(network.biaises[1]), 4)
+        self.assertEqual(len(network.biases), 2)
+        self.assertEqual(len(network.biases[0]), 5)
+        self.assertEqual(len(network.biases[1]), 4)
 
     def test_initialization_weights(self):
 
@@ -37,7 +37,7 @@ class test_activation_parameters(unittest.TestCase):
         # Initalize
         network = Network(size)
 
-        # Check biaises
+        # Check biases
         self.assertEqual(len(network.weights), 2)
         self.assertTupleEqual(np.shape(network.weights[0]), (5, 3))
         self.assertTupleEqual(np.shape(network.weights[1]), (4, 5))
