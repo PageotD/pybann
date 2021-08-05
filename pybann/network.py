@@ -21,13 +21,14 @@ class Network:
         self.nLayers = len(size)
 
         # Initialize weights and biases
-        self.biases = [ np.random.standard_normal(n) for n in size[1:]]
-        self.weights = [ np.random.standard_normal(m) for m in zip(size[1:], size[:-1])]
+        self.biases = [ np.random.randn(n, 1) for n in size[1:]]
+        self.weights = [ np.random.randn(m, n) for n, m in zip(size[:-1], size[1:])]
 
     def feedforward(self, nodeValues):
         """
         nodeValues are the input values for the network
         """
+        nodeValues = np.reshape(nodeValues, (len(nodeValues),1))
         for weights, biases in zip(self.weights, self.biases):
             nodeValues = sigmoid(np.dot(weights, nodeValues) + biases)
 
