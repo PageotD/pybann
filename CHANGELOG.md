@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `tests/test_activation.py`
 - `pybann/network.py` containing network methods
 - `tests/test_network.py`
+- `pybann/backpropagation.py` containing the backpropagation algorithm
 
 ### Changed
 
