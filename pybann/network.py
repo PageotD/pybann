@@ -21,22 +21,30 @@ class Network:
         self.nLayers = len(size)
 
         # Initialize weights and biases
+        # Vector with size (n, 1) needed for dot product with numpy
         self.biases = [ np.random.randn(n, 1) for n in size[1:]]
         self.weights = [ np.random.randn(m, n) for n, m in zip(size[:-1], size[1:])]
+
+    def load(self):
+        """
+        To load ANN weights and biases (of a previously trained ANN) from files
+        """
+        pass
 
     def feedforward(self, nodeValues):
         """
         nodeValues are the input values for the network
         """
-        nodeValues = np.reshape(nodeValues, (len(nodeValues),1))
+        nodeValues = np.atleast_2d(nodeValues).transpose()
         for weights, biases in zip(self.weights, self.biases):
             nodeValues = sigmoid(np.dot(weights, nodeValues) + biases)
 
-        return nodeValues
+        # Return the result as a 1D vector
+        return nodeValues.transpose().flatten()
 
-    def training(self, dataset, niter=20, alpha=0.15):
+    def train(self, dataset, niter=20, alpha=0.15):
         """
-        Training
+        Train
         :param dataset: a list of tuples in the form (inValues, outValues)
         :param niter: number of iterations
         :param alpha: step
@@ -53,3 +61,6 @@ class Network:
             # Updating self.weights and self.biases
             self.weights = [w-alpha*nw for w, nw in zip(self.weights, nablaW)]
             self.biases = [b-alpha*nb for b, nb in zip(self.biases, nablaB)]
+
+    def test(self, dataset):
+        pass

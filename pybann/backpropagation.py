@@ -1,18 +1,22 @@
 import numpy as np
 from .activation import sigmoid
 
-def backpropagate(nLayers, weights, biases, inValues, outValues):
+def backpropagate(nLayers, weights, biases, injected, predicted):
     """
-    :param invalues: input values
-    :param outValues: attempted output values
+    :param injected: input values
+    :param predicted: attempted output values
     :return : updated weights and biaises
     """
+    # Input/output vectors must be at least 2D (n, 1) to be used with numpy dot product
+    injected = np.atleast_2d(injected)
+    predicted = np.atleast_2d(predicted)
+
     # Initialize
     nablaW = [np.zeros(w.shape) for w in weights]
     nablaB = [np.zeros(b.shape) for b in biases]
 
     # Feedforward
-    activation = np.reshape(inValues, (len(inValues),1))
+    activation = injected.transpose()
     activations = [activation]
     wsvectors = [] # wsvectors are the weighted sums of inputs calculated for each layer
     for b, w in zip(biases, weights):
@@ -22,7 +26,7 @@ def backpropagate(nLayers, weights, biases, inValues, outValues):
         activations.append(activation)
 
     # Backward
-    delta = (activations[-1] - outValues) * sigmoid(wsvectors[-1], deriv=True)
+    delta = (activations[-1] - predicted.transpose()) * sigmoid(wsvectors[-1], deriv=True)
     nablaW[-1] = np.dot(delta, activations[-2].transpose())
     nablaB[-1] = delta
     for iLayer in range(2, nLayers):

@@ -50,8 +50,8 @@ class test_activation_parameters(unittest.TestCase):
         # Initalize
         network = Network(size)
 
-        inValues = [3., 1., -1.]
+        inValues = [-1., 0., 1.]
 
         outValues = network.feedforward(inValues)
-        
+
         self.assertEqual(len(outValues), 4)
