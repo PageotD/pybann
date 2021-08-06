@@ -7,7 +7,7 @@ A module to define the artificial neural network.
 # Import modules
 import numpy as np
 from .activation import sigmoid
-
+from .backpropagation import backpropagate
 class Network:
 
     def __init__(self, size):
@@ -42,25 +42,36 @@ class Network:
         # Return the result as a 1D vector
         return nodeValues.transpose().flatten()
 
-    def train(self, dataset, niter=20, alpha=0.15):
+    def train(self, dataset, niter=2000, alpha=0.1, decay=0.0):
         """
         Train
         :param dataset: a list of tuples in the form (inValues, outValues)
         :param niter: number of iterations
         :param alpha: step
         """
-        for iter in niter:
+        
+        diffW = [np.zeros(w.shape) for w in self.weights]
+        diffB = [np.zeros(b.shape) for b in self.biases]
+
+        for iter in range(niter):
         #   For each row of data pass input and attempted output to backpropagate
             nablaW = [np.zeros(w.shape) for w in self.weights]
             nablaB = [np.zeros(b.shape) for b in self.biases]
-            for i in range(len(data)):
-                dnablaW, dnablaB = self.backpropagate(self.nLayers, self.weights, self.biases, inValue[i], outValue[i])
+            for i in range(len(dataset)):
+                dnablaW, dnablaB = backpropagate(self.nLayers, self.weights, self.biases, dataset[i][0], dataset[i][1])
                 # Updating B and W 
                 nablaB = [nb+dnb for nb, dnb in zip(nablaB, dnablaB)]
                 nablaW = [nw+dnw for nw, dnw in zip(nablaW, dnablaW)]
             # Updating self.weights and self.biases
-            self.weights = [w-alpha*nw for w, nw in zip(self.weights, nablaW)]
-            self.biases = [b-alpha*nb for b, nb in zip(self.biases, nablaB)]
+            #self.weights = [w-alpha*nw for w, nw in zip(self.weights, nablaW)]
+            #self.biases = [b-alpha*nb for b, nb in zip(self.biases, nablaB)]
+
+            diffW = [decay*snw-alpha*nw for snw, nw in zip(diffW, nablaW)]
+            diffB = [decay*snb-alpha*nb for snb, nb in zip(diffB, nablaB)]
+
+            self.weights = [w+dw for w, dw in zip(self.weights, diffW)]
+            self.biases = [b+db for b, db in zip(self.biases, diffB)]
+
 
     def test(self, dataset):
         pass
