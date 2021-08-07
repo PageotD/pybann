@@ -17,6 +17,18 @@ def identity(x, deriv=False):
     else:
         return 1.
 
+def heaviside(x, deriv=False):
+    """
+    """
+    # Add an epsilon value to ensure there is no strict zero values
+    if deriv: x += np.finfo(float).eps
+
+    if not deriv and x < 0.:
+        return 0.
+    if not deriv and x >= 0.:
+        return 1.
+    if deriv: return 0.
+
 def sigmoid(x, deriv=False):
     """
     The sigmoid function and its derivative.

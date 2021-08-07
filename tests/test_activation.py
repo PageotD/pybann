@@ -1,5 +1,5 @@
 import unittest
-from pybann.activation import identity, sigmoid, relu, tanhyp, softplus, gaussian
+from pybann.activation import identity, heaviside, sigmoid, relu, tanhyp, softplus, gaussian
 
 class test_activation(unittest.TestCase):
 
@@ -26,6 +26,30 @@ class test_activation(unittest.TestCase):
         # Output
         for i in range(len(a)):
             self.assertAlmostEqual(identity(a[i], deriv=True), o[i], delta=1.e-7)
+
+    def test_heaviside(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [0., 1., 1.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(heaviside(a[i]), o[i], delta=1.e-7)
+
+    def test_heaviside_derivative(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [0., 0., 0.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(heaviside(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_sigmoid(self):
 
