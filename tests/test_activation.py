@@ -1,5 +1,5 @@
 import unittest
-from pybann.activation import identity, sigmoid, tanhyp, softplus, gaussian
+from pybann.activation import identity, sigmoid, relu, tanhyp, softplus, gaussian
 
 class test_activation(unittest.TestCase):
 
@@ -13,7 +13,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(sigmoid(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(identity(a[i]), o[i], delta=1.e-7)
 
     def test_identity_derivative(self):
 
@@ -25,7 +25,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(sigmoid(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(identity(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_sigmoid(self):
 
@@ -51,13 +51,37 @@ class test_activation(unittest.TestCase):
         for i in range(len(a)):
             self.assertAlmostEqual(sigmoid(a[i], deriv=True), o[i], delta=1.e-7)
 
+    def test_relu(self):
+
+        # Input
+        a = [-1., 0., 2.]
+
+        # Attempted output
+        o = [0., 0., 2.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(relu(a[i]), o[i], delta=1.e-7)
+
+    def test_relu_derivative(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [0., 1., 1.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(relu(a[i], deriv=True), o[i], delta=1.e-7)
+
     def test_tanhyp(self):
 
         # Input
         a = [-1., 0., 1.]
 
         # Attempted output
-        o = [0.23840584, 1.0, 1.76159415]
+        o = [-0.76159415, 0.0, 0.76159415]
 
         # Output
         for i in range(len(a)):
@@ -69,7 +93,7 @@ class test_activation(unittest.TestCase):
         a = [-1., 0., 1.]
 
         # Attempted output
-        o = [0.94316265, 0.0, -2.10321397]
+        o = [0.41997434, 1.0, 0.41997434]
 
         # Output
         for i in range(len(a)):

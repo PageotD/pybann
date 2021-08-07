@@ -50,12 +50,11 @@ exclude_patterns = []
 html_theme = 'pydata_sphinx_theme'
 
 html_theme_options = {
-    ...
     "icon_links": [
         {
             "name": "GitHub",
             "url": "https://github.com/PageotD/pybann",
-            "icon": "fab fa-github-square",
+            "icon": "fab fa-github",
         }
     ]
 }

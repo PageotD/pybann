@@ -10,41 +10,59 @@ import numpy as np
 
 def identity(x, deriv=False):
     """
-    The sigmoid function and its derivative.
+    The linear identity function and its derivative.
     """
-    idt = x
     if not deriv:
-        return idt
+        return x
     else:
-        return np.ones(len(x))
+        return 1.
 
 def sigmoid(x, deriv=False):
     """
     The sigmoid function and its derivative.
     """
-    sig = 1.0 / (1.0 + np.exp(-x))
+    f = 1.0 / (1.0 + np.exp(-x))
     if not deriv:
-        return sig
+        return f
     else:
-        return sig * (1.0 - sig)
+        return f * (1.0 - f)
+
+def relu(x, deriv=False):
+    """
+    Rectified Linear Unit
+
+    Nair, V., & Hinton, G. E. (2010, January). Rectified linear units improve
+    restricted boltzmann machines. In Icml.
+    """
+    # Add an epsilon value to ensure there is no strict zero values
+    if deriv: x += np.finfo(float).eps
+    
+    if not deriv and x <= 0.:
+        return 0.
+    if not deriv and x > 0.:
+        return x
+    if deriv and x < 0.:
+        return 0.
+    if deriv and x > 0.:
+        return 1.
+     
 
 def tanhyp(x, deriv=False):
     """
     Hyperbolic tangent
     """
-    tanh = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+    f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
     if not deriv:
-        return tanh
+        return f
     else:
-        return 1. - tanh**2
+        return 1. - f**2
 
 def softplus(x, deriv=False):
     """
     Softplus 
     """
-    splus = np.log(1. + np.exp(x))
     if not deriv:
-        return splus
+        return np.log(1. + np.exp(x))
     else:
         return sigmoid(x)
 
@@ -52,8 +70,8 @@ def gaussian(x, deriv=False):
     """
     Gaussian
     """
-    gauss = np.exp(-x**2)
+    f = np.exp(-x**2)
     if not deriv:
-        return gauss
+        return f
     else:
-        return -2 * x * gauss
+        return -2 * x * f

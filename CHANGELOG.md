@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `tests/backpropagation.py`
 - `data/iris/iris.data` & `data/iris/iris.names`
 - `examples/iris-example.py`
+- `docs/` documentation using sphinx and the pydata theme
 
 ### Changed
 
