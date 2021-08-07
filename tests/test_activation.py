@@ -1,7 +1,31 @@
 import unittest
-from pybann.activation import sigmoid, tanhyp, softplus, gaussian
+from pybann.activation import identity, sigmoid, tanhyp, softplus, gaussian
 
 class test_activation(unittest.TestCase):
+
+    def test_identity(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [-1., 0., 1.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(sigmoid(a[i]), o[i], delta=1.e-7)
+
+    def test_identity_derivative(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [1., 1., 1.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(sigmoid(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_sigmoid(self):
 

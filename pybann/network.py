@@ -42,7 +42,7 @@ class Network:
         # Return the result as a 1D vector
         return nodeValues.transpose().flatten()
 
-    def train(self, dataset, niter=2000, alpha=0.1, decay=0.0):
+    def train(self, dataset, niter=250, alpha=0.02, decay=0.0):
         """
         Train
         :param dataset: a list of tuples in the form (inValues, outValues)

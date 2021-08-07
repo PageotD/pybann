@@ -8,6 +8,15 @@ artificial neural network.
 # Import modules
 import numpy as np
 
+def identity(x, deriv=False):
+    """
+    The sigmoid function and its derivative.
+    """
+    idt = x
+    if not deriv:
+        return idt
+    else:
+        return np.ones(len(x))
 
 def sigmoid(x, deriv=False):
     """
@@ -23,11 +32,11 @@ def tanhyp(x, deriv=False):
     """
     Hyperbolic tangent
     """
-    tan = 2. / (1. + np.exp(-2. * x))
+    tanh = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
     if not deriv:
-        return tan
+        return tanh
     else:
-        return 1 - (tan * tan)
+        return 1. - tanh**2
 
 def softplus(x, deriv=False):
     """
