@@ -1,55 +1,7 @@
 import unittest
-from pybann.activation import identity, heaviside, sigmoid, relu, tanhyp, softplus, gaussian
+from pybann.activation import sigmoid, relu, leakyrelu, tanhyp, softplus, gaussian
 
 class test_activation(unittest.TestCase):
-
-    def test_identity(self):
-
-        # Input
-        a = [-1., 0., 1.]
-
-        # Attempted output
-        o = [-1., 0., 1.]
-
-        # Output
-        for i in range(len(a)):
-            self.assertAlmostEqual(identity(a[i]), o[i], delta=1.e-7)
-
-    def test_identity_derivative(self):
-
-        # Input
-        a = [-1., 0., 1.]
-
-        # Attempted output
-        o = [1., 1., 1.]
-
-        # Output
-        for i in range(len(a)):
-            self.assertAlmostEqual(identity(a[i], deriv=True), o[i], delta=1.e-7)
-
-    def test_heaviside(self):
-
-        # Input
-        a = [-1., 0., 1.]
-
-        # Attempted output
-        o = [0., 1., 1.]
-
-        # Output
-        for i in range(len(a)):
-            self.assertAlmostEqual(heaviside(a[i]), o[i], delta=1.e-7)
-
-    def test_heaviside_derivative(self):
-
-        # Input
-        a = [-1., 0., 1.]
-
-        # Attempted output
-        o = [0., 0., 0.]
-
-        # Output
-        for i in range(len(a)):
-            self.assertAlmostEqual(heaviside(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_sigmoid(self):
 
@@ -98,6 +50,30 @@ class test_activation(unittest.TestCase):
         # Output
         for i in range(len(a)):
             self.assertAlmostEqual(relu(a[i], deriv=True), o[i], delta=1.e-7)
+
+    def test_leakyrelu(self):
+
+        # Input
+        a = [-1., 0., 2.]
+
+        # Attempted output
+        o = [-0.01, 0., 2.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(leakyrelu(a[i]), o[i], delta=1.e-7)
+
+    def test_leayrelu_derivative(self):
+
+        # Input
+        a = [-1., 0., 1.]
+
+        # Attempted output
+        o = [-0.01, 1., 1.]
+
+        # Output
+        for i in range(len(a)):
+            self.assertAlmostEqual(leakyrelu(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_tanhyp(self):
 
@@ -170,6 +146,3 @@ class test_activation(unittest.TestCase):
         # Output
         for i in range(len(a)):
             self.assertAlmostEqual(gaussian(a[i], deriv=True), o[i], delta=1.e-7)
-
-    ##### TODO
-    ## tanhyp, softplus, gaussian

@@ -8,27 +8,6 @@ artificial neural network.
 # Import modules
 import numpy as np
 
-def identity(x, deriv=False):
-    """
-    The linear identity function and its derivative.
-    """
-    if not deriv:
-        return x
-    else:
-        return 1.
-
-def heaviside(x, deriv=False):
-    """
-    """
-    # Add an epsilon value to ensure there is no strict zero values
-    if deriv: x += np.finfo(float).eps
-
-    if not deriv and x < 0.:
-        return 0.
-    if not deriv and x >= 0.:
-        return 1.
-    if deriv: return 0.
-
 def sigmoid(x, deriv=False):
     """
     The sigmoid function and its derivative.
@@ -38,6 +17,17 @@ def sigmoid(x, deriv=False):
         return f
     else:
         return f * (1.0 - f)
+
+
+def tanhyp(x, deriv=False):
+    """
+    Hyperbolic tangent
+    """
+    f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+    if not deriv:
+        return f
+    else:
+        return 1. - f**2
 
 def relu(x, deriv=False):
     """
@@ -57,17 +47,22 @@ def relu(x, deriv=False):
         return 0.
     if deriv and x > 0.:
         return 1.
-     
 
-def tanhyp(x, deriv=False):
+def leakyrelu(x, deriv=False):
     """
-    Hyperbolic tangent
+    Leaky Rectified Linear Unit
     """
-    f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
-    if not deriv:
-        return f
-    else:
-        return 1. - f**2
+    # Add an epsilon value to ensure there is no strict zero values
+    if deriv: x += np.finfo(float).eps
+    
+    if not deriv and x <= 0.:
+        return 0.01 * x
+    if not deriv and x > 0.:
+        return x
+    if deriv and x < 0.:
+        return 0.01 * x
+    if deriv and x > 0.:
+        return 1.
 
 def softplus(x, deriv=False):
     """
