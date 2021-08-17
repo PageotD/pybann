@@ -1,3 +1,4 @@
-from . import activation
-from . import backpropagation
-from .network import Network
+from .activation import Activation
+from .layers import Layer
+from .gradientdescent import GradientDescent
+from .model import Model

@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `pybann/activation.py` containing activation functions (sigmoid only for now)
-- `tests/test_activation.py`
-- `pybann/network.py` containing network methods
-- `tests/test_network.py`
-- `pybann/backpropagation.py` containing the backpropagation algorithm
-- `tests/backpropagation.py`
+- `tests/tests_activation.py`
+- `pybann/layers.py` containing layer creation methods
+- `tests/tests_layers.py`
+- `pybann/model.py` containing network model methods
+- `tests/tests_model.py`
+- `pybann/gradientdescent.py` containing the backpropagation algorithm
+- `tests/tests_gradientdescent.py`
 - `data/iris/iris.data` & `data/iris/iris.names`
 - `examples/iris-example.py`
 - `docs/` documentation using sphinx and the pydata theme

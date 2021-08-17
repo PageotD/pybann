@@ -1,7 +1,7 @@
 import unittest
-from pybann.activation import sigmoid, relu, leakyrelu, tanhyp, softplus, gaussian
+from pybann import Activation
 
-class test_activation(unittest.TestCase):
+class tests_activation(unittest.TestCase):
 
     def test_sigmoid(self):
 
@@ -13,7 +13,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(sigmoid(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.sigmoid(a[i]), o[i], delta=1.e-7)
 
     def test_sigmoid_derivative(self):
 
@@ -25,7 +25,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(sigmoid(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.sigmoid(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_relu(self):
 
@@ -37,19 +37,19 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(relu(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i]), o[i], delta=1.e-7)
 
     def test_relu_derivative(self):
 
         # Input
-        a = [-1., 0., 1.]
+        a = [-1., 0., 2.]
 
         # Attempted output
         o = [0., 1., 1.]
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(relu(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_leakyrelu(self):
 
@@ -57,11 +57,11 @@ class test_activation(unittest.TestCase):
         a = [-1., 0., 2.]
 
         # Attempted output
-        o = [-0.01, 0., 2.]
+        o = [-0.1, 0., 2.]
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(leakyrelu(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i], a=0.1), o[i], delta=1.e-7)
 
     def test_leayrelu_derivative(self):
 
@@ -69,11 +69,11 @@ class test_activation(unittest.TestCase):
         a = [-1., 0., 1.]
 
         # Attempted output
-        o = [-0.01, 1., 1.]
+        o = [0.1, 1., 1.]
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(leakyrelu(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i], a=0.1, deriv=True), o[i], delta=1.e-7)
 
     def test_tanhyp(self):
 
@@ -85,7 +85,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(tanhyp(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.tanhyp(a[i]), o[i], delta=1.e-7)
 
     def test_tanhyp_derivative(self):
 
@@ -97,7 +97,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(tanhyp(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.tanhyp(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_softplus(self):
 
@@ -109,7 +109,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(softplus(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.softplus(a[i]), o[i], delta=1.e-7)
 
     def test_softplus_derivative(self):
 
@@ -121,7 +121,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(softplus(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.softplus(a[i], deriv=True), o[i], delta=1.e-7)
 
     def test_gaussian(self):
 
@@ -133,7 +133,7 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(gaussian(a[i]), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.gaussian(a[i]), o[i], delta=1.e-7)
 
     def test_gaussian_derivative(self):
 
@@ -145,4 +145,4 @@ class test_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(gaussian(a[i], deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.gaussian(a[i], deriv=True), o[i], delta=1.e-7)

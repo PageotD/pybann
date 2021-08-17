@@ -8,77 +8,75 @@ artificial neural network.
 # Import modules
 import numpy as np
 
-def sigmoid(x, deriv=False):
-    """
-    The sigmoid function and its derivative.
-    """
-    f = 1.0 / (1.0 + np.exp(-x))
-    if not deriv:
-        return f
-    else:
-        return f * (1.0 - f)
+class Activation:
 
+    def __init__(self):
+        pass
 
-def tanhyp(x, deriv=False):
-    """
-    Hyperbolic tangent
-    """
-    f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
-    if not deriv:
-        return f
-    else:
-        return 1. - f**2
+    @staticmethod
+    def sigmoid(x, deriv=False):
+        """
+        The sigmoid function and its derivative.
+        """
+        f = 1.0 / (1.0 + np.exp(-x))
+        if not deriv:
+            return f
+        else:
+            return f * (1.0 - f)
 
-def relu(x, deriv=False):
-    """
-    Rectified Linear Unit
+    @staticmethod
+    def tanhyp(x, deriv=False):
+        """
+        Hyperbolic tangent
+        """
+        f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+        if not deriv:
+            return f
+        else:
+            return 1. - f**2
 
-    Nair, V., & Hinton, G. E. (2010, January). Rectified linear units improve
-    restricted boltzmann machines. In Icml.
-    """
-    # Add an epsilon value to ensure there is no strict zero values
-    if deriv: x += np.finfo(float).eps
-    
-    if not deriv and x <= 0.:
-        return 0.
-    if not deriv and x > 0.:
-        return x
-    if deriv and x < 0.:
-        return 0.
-    if deriv and x > 0.:
-        return 1.
+    @staticmethod
+    def relu(x, a=0., deriv=False):
+        """
+        Leaky Rectified Linear Unit
+        """
+        # Add an epsilon value to ensure there is no strict zero values
+        if deriv: x += np.finfo(float).eps
 
-def leakyrelu(x, deriv=False):
-    """
-    Leaky Rectified Linear Unit
-    """
-    # Add an epsilon value to ensure there is no strict zero values
-    if deriv: x += np.finfo(float).eps
-    
-    if not deriv and x <= 0.:
-        return 0.01 * x
-    if not deriv and x > 0.:
-        return x
-    if deriv and x < 0.:
-        return 0.01 * x
-    if deriv and x > 0.:
-        return 1.
+        if np.ndim(x) != 0:
+            if not deriv:
+                f = [a * x[i] if x[i] <=0. else x[i] for i in range(len(x))]
+                #f = np.maximum(x, a * x)
+                return np.array(f)
+            else:
+                #f = [a if x[i] <0. else 1. for i in range(len(x))]
+                f = np.copy(x)
+                f[f < 0.] = a
+                f[f >=0.] = 1.
+                return f
+        else:
+            if not deriv:
+                return a * x if x <= 0. else x
+            else:
+                return a if x < 0. else 1.
 
-def softplus(x, deriv=False):
-    """
-    Softplus 
-    """
-    if not deriv:
-        return np.log(1. + np.exp(x))
-    else:
-        return sigmoid(x)
+    @staticmethod
+    def softplus(x, deriv=False):
+        """
+        Softplus 
+        """
+        if not deriv:
+            return np.log(1. + np.exp(x))
+        else:
+            return Activation.sigmoid(x)
 
-def gaussian(x, deriv=False):
-    """
-    Gaussian
-    """
-    f = np.exp(-x**2)
-    if not deriv:
-        return f
-    else:
-        return -2 * x * f
+    @staticmethod
+    def gaussian(x, deriv=False):
+        """
+        Gaussian
+        """
+        f = np.exp(-(x**2))
+        if not deriv:
+            return f
+        else:
+            return -2 * x * f

@@ -9,7 +9,10 @@ Welcome to pybann's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   ./getting_started.rst
+   ./user_guide.rst
+   ./api_reference.rst
 
 
 Indices and tables
