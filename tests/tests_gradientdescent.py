@@ -26,10 +26,12 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, testModel.layers)
+        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
 
         self.assertEqual(SGD.alpha, 0.05)
         self.assertEqual(SGD.niter, 1000)
+        self.assertEqual(SGD.momentum, 0.5)
+
         self.assertTupleEqual(SGD.dataset[0][0], dataset[0][0])
         self.assertTupleEqual(SGD.dataset[0][1], dataset[0][1])
         self.assertTupleEqual(SGD.dataset[1][0], dataset[1][0])
@@ -57,13 +59,18 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, testModel.layers)
+        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
         SGD.initializeUpdate()
 
         self.assertEqual(np.sum(SGD.layers[1].weightsUpdate), 0.)
         self.assertEqual(np.sum(SGD.layers[2].weightsUpdate), 0.)
         self.assertEqual(np.sum(SGD.layers[1].biasesUpdate), 0.)
         self.assertEqual(np.sum(SGD.layers[2].biasesUpdate), 0.)
+
+        self.assertEqual(np.sum(SGD.layers[1].weightsUpdateSave), 0.)
+        self.assertEqual(np.sum(SGD.layers[2].weightsUpdateSave), 0.)
+        self.assertEqual(np.sum(SGD.layers[1].biasesUpdateSave), 0.)
+        self.assertEqual(np.sum(SGD.layers[2].biasesUpdateSave), 0.)
 
     def test_dataSplit(self):
 
@@ -85,7 +92,7 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, testModel.layers)
+        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
         inValues, outValues = SGD.dataSplit(dataset[0])
 
         self.assertListEqual(list(inValues[0]), [1., 1., 0., 0.])
@@ -111,11 +118,10 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, testModel.layers)
+        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
         inValues, outValues = SGD.dataSplit(dataset[0])
         activation, transfer = SGD.forward(inValues)
         
-        print(np.shape(activation[0]))
         self.assertTupleEqual(np.shape(activation[0]), (4, 1))
         self.assertTupleEqual(np.shape(activation[1]), (8, 1))
         self.assertTupleEqual(np.shape(activation[2]), (3, 1))

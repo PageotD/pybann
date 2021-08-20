@@ -27,6 +27,7 @@ class Layer:
         """
         self.__setattr__('weights', np.random.randn(self.neurons, inputNeurons))
         self.__setattr__('weightsUpdate', np.zeros((self.neurons, inputNeurons)))
+        self.__setattr__('weightsUpdateSave', np.zeros((self.neurons, inputNeurons)))
 
     def addBiases(self)->None:
         """
@@ -34,6 +35,7 @@ class Layer:
         """
         self.__setattr__('biases', np.random.randn(self.neurons, 1))
         self.__setattr__('biasesUpdate', np.zeros((self.neurons,1)))
+        self.__setattr__('biasesUpdateSave', np.zeros((self.neurons,1)))
 
     def __repr__(self)->str:
         return "Layer({}, {}, {})".format(self.neurons, self.activation, self.label)

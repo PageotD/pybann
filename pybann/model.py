@@ -59,14 +59,14 @@ class Model:
         # Flatten output (convert to 1D vector)
         return inValues.flatten()
 
-    def SGD(self, dataset, alpha:float=0.05, niter:int=1000)->None:
+    def SGD(self, dataset, alpha:float=0.05, niter:int=1000, momentum:float=0.5)->None:
         """
         Train
         :param dataset: a list of tuples in the form (inValues, outValues)
         :param niter: number of iterations
         :param alpha: step
         """
-        SGDescent = GradientDescent(dataset, alpha, niter, self.layers)
+        SGDescent = GradientDescent(dataset, alpha, niter, momentum, self.layers)
         SGDescent.run()
 
     def PSO(self):

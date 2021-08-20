@@ -1,12 +1,14 @@
 import numpy as np
+import copy as cp
 from tqdm import tqdm
 
 class GradientDescent:
 
-    def __init__(self, dataset, alpha, niter, layers):
+    def __init__(self, dataset, alpha, niter, momentum, layers):
         self.dataset = dataset
         self.alpha = alpha
         self.niter = niter
+        self.momentum = momentum
         self.layers = layers
 
     def initializeUpdate(self):
@@ -48,11 +50,18 @@ class GradientDescent:
             self.layers[-ilayer].biasesUpdate += delta
 
     def update(self):
-                    
+
         # Update weights and biases
         for ilayer in range(1, len(self.layers)):
-            self.layers[ilayer].weights -= self.alpha * self.layers[ilayer].weightsUpdate
-            self.layers[ilayer].biases -= self.alpha * self.layers[ilayer].biasesUpdate
+            
+            # Increment
+            self.layers[ilayer].weights -= (self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
+            self.layers[ilayer].biases -= (self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
+
+            # Store update
+            self.layers[ilayer].weightsUpdateSave = (self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
+            self.layers[ilayer].biasesUpdateSave = (self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
+
 
     def run(self)->None:
         """
@@ -62,7 +71,6 @@ class GradientDescent:
         :param alpha: step
         """
 
-        #for iter in range(self.niter):
         for iter in tqdm(range(self.niter), desc="Training..."):
             # Re-initialize update arrays
             self.initializeUpdate()
