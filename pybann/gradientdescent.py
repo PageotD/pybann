@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 
 class GradientDescent:
 
@@ -61,8 +62,8 @@ class GradientDescent:
         :param alpha: step
         """
 
-        for iter in range(self.niter):
-
+        #for iter in range(self.niter):
+        for iter in tqdm(range(self.niter), desc="Training..."):
             # Re-initialize update arrays
             self.initializeUpdate()
 
