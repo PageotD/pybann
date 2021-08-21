@@ -55,12 +55,12 @@ class GradientDescent:
         for ilayer in range(1, len(self.layers)):
             
             # Increment
-            self.layers[ilayer].weights -= (self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
-            self.layers[ilayer].biases -= (self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
+            self.layers[ilayer].weights += (-self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
+            self.layers[ilayer].biases += (-self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
 
             # Store update
-            self.layers[ilayer].weightsUpdateSave = (self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
-            self.layers[ilayer].biasesUpdateSave = (self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
+            self.layers[ilayer].weightsUpdateSave = (-self.alpha * self.layers[ilayer].weightsUpdate + self.momentum * self.layers[ilayer].weightsUpdateSave)
+            self.layers[ilayer].biasesUpdateSave = (-self.alpha * self.layers[ilayer].biasesUpdate + self.momentum * self.layers[ilayer].biasesUpdateSave)
 
 
     def run(self)->None:

@@ -7,8 +7,8 @@ np.random.seed(10)
 network = Model(name='IRIS example')
 
 network.addInput(neurons=4)
-network.addLayer(neurons=8, activation="sigmoid")
-network.addLayer(neurons=3, activation="relu")
+network.addLayer(neurons=12, activation="sigmoid")
+network.addLayer(neurons=3, activation="sigmoid")
 
 network.build()
 
@@ -36,7 +36,7 @@ with open('data/iris/iris.data', 'r') as f:
                 train = True
 
 print(len(inData), len(inDataTest))
-network.SGD(dataset=inData,alpha=0.0025, momentum=0.7, niter=2000)
+network.SGD(dataset=inData,alpha=1.e-3, momentum=0.9, niter=2500)
 
 loss = 0.
 for i in range(len(inDataTest)):
@@ -45,4 +45,4 @@ for i in range(len(inDataTest)):
 
 loss /= float(len(inDataTest))
 
-print((1-loss)*100)
+print(loss, (1-loss)*100)
