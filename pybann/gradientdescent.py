@@ -4,7 +4,10 @@ from tqdm import tqdm
 
 class GradientDescent:
 
-    def __init__(self, dataset, alpha, niter, momentum, layers):
+    def __init__(self, dataset, alpha:float, niter:int, momentum:float, layers)->None:
+        """
+        Constructor
+        """
         self.dataset = dataset
         self.alpha = alpha
         self.niter = niter
@@ -20,13 +23,20 @@ class GradientDescent:
             self.layers[ilayer].biasesUpdate[:] = 0.
 
     def dataSplit(self, dataset):
-
+        """
+        Split the data in input and output array
+        """
         # Get input and output
         inValues = np.atleast_2d(dataset[0])
         outValues = np.atleast_2d(dataset[1])
         return inValues, outValues
 
-    def forward(self, inValues):
+    def forward(self, inValues)->None:
+        """
+        Return the output of the neural network for a given 
+        input dataset and stores the intermediate results
+        (transfer and activation results).
+        """
         # Activation
         activation = [inValues.transpose()]
         transfer = []
@@ -38,7 +48,11 @@ class GradientDescent:
 
         return activation, transfer
 
-    def backward(self, activation, transfer, outValues):
+    def backward(self, activation, transfer, outValues)->None:
+        """
+        Calculates the gradient for each weight matrix and biase vector
+        of the neural network.
+        """
         # Backward
         delta = (activation[-1] - outValues.transpose()) * self.layers[-1].activation(transfer[-1], deriv=True)
         self.layers[-1].weightsUpdate += np.dot(delta, activation[-2].transpose())
@@ -49,8 +63,10 @@ class GradientDescent:
             self.layers[-ilayer].weightsUpdate += np.dot(delta, activation[-ilayer-1].transpose())
             self.layers[-ilayer].biasesUpdate += delta
 
-    def update(self):
-
+    def update(self)->None:
+        """
+        Update the weight matrix and biase vector of the neural network.
+        """
         # Update weights and biases
         for ilayer in range(1, len(self.layers)):
             
