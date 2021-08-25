@@ -13,17 +13,56 @@ class Layer:
         
         self.label = label
 
-    def addActivation(self, activation: str="sigmoid"):
+    def addActivation(self, activation: str="sigmoid")->None:
         """
-        Add an activation function
+        Add an activation function to the Layer object
+
+        Parameters
+        ----------
+        activation: str (optional)
+            name of the activation function (default `sigmoid`)
+        
+        Examples
+        --------
+
+        >>> from pybann import Layer
+        >>> layer1 = Layer(neurons=4)
+        >>> layer1.addActivation()
+        >>> layer1.activation.__name__
+        sigmoid
+
+        >>> layer2 = Layer(neurons=4)
+        >>> layer2.addActivation(activation="relu")
+        >>> layer2.activation.__name__
+        relu
+
         """
         self.__setattr__('activation', getattr(Activation, activation))
 
     def addWeights(self, inputNeurons:int)->None:
         """
-        Add a matrice containing random weights
+        Add weight matrix for the feed forward, and updated weight matrices
+        for the gradient descent.
 
-        :param inputNeurons: number of neurons in the previous layer if exist
+        Parameters
+        ----------
+        inputNeurons: int
+            number of neurons in the layer
+
+        Examples
+        --------
+
+        >>> import numpy as np
+        >>> from pybann import Layer
+        >>> layer1 = Layer(neurons=4)
+        >>> layer1.addWeights(inputNeurons=8)
+        >>> np.shape(layer1.weights)
+        (4, 8)
+        >>> np.shape(layer1.weightsUpdate)
+        (4, 8)
+        >>> np.shape(layer1.weightsUpdateSave)
+        (4, 8)
+        
         """
         self.__setattr__('weights', np.random.randn(self.neurons, inputNeurons))
         self.__setattr__('weightsUpdate', np.zeros((self.neurons, inputNeurons)))

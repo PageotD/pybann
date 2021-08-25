@@ -1,14 +1,11 @@
 API Reference
 =============
 
-.. autoclass:: pybann.Activation
-    :members:
+.. toctree::
+    :maxdepth: 3
+    :caption: Contents:
 
-.. autoclass:: pybann.Layer
-    :members:
-
-.. autoclass:: pybann.Model
-    :members:
-
-.. autoclass:: pybann.GradientDescent
-    :members:
+    ./api_activation.rst
+    ./api_layer.rst
+    ./api_model.rst
+    ./api_gradient.rst
