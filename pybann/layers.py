@@ -62,7 +62,7 @@ class Layer:
         (4, 8)
         >>> np.shape(layer1.weightsUpdateSave)
         (4, 8)
-        
+
         """
         self.__setattr__('weights', np.random.randn(self.neurons, inputNeurons))
         self.__setattr__('weightsUpdate', np.zeros((self.neurons, inputNeurons)))
@@ -70,7 +70,16 @@ class Layer:
 
     def addBiases(self)->None:
         """
-        Add a vector containing random biases
+        Add biase vector for the feed forward, and updated biase vectors
+        for the gradient descent.
+
+        >>> import numpy as np
+        >>> from pybann import Layer
+        >>> layer1 = Layer(neurons=4)
+        >>> layer1.addBiases()
+        >>> np.shape(layer1.biases)
+        (4,1)
+        
         """
         self.__setattr__('biases', np.random.randn(self.neurons, 1))
         self.__setattr__('biasesUpdate', np.zeros((self.neurons,1)))

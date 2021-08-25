@@ -17,7 +17,24 @@ class Model:
         pass
 
     def addInput(self, neurons: int, label: str="")->None:
+        """
+        Add an input layer to the network model.
 
+        Parameters
+        ----------
+        neurons: int
+            number of neurons in the input layer
+        label: str (optional)
+            label (name) of the layer
+
+        Examples
+        --------
+
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+
+        """
         try:
             # Assert the number of neurons is at least 1
             assert neurons >= 1
@@ -27,7 +44,27 @@ class Model:
             print("The layer must have at least 1 neuron.")
 
     def addLayer(self, neurons: int, activation: str="sigmoid", label: str="")->None:
+        """
+        Add a layer to the network model.
 
+        Parameters
+        ----------
+        neurons: int
+            number of neurons in the layer
+        activation: str (optional, default:"sigmoid)
+            activation function for the layer
+        label: str (optional)
+            label (name) of the layer
+        
+        Examples
+        --------
+        
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+        >>> network.addLayer(neurons=8, activation="relu", label="1st hidden layer")
+
+        """
         try:
             # Assert the number of neurons is at least 1
             assert neurons >= 1
@@ -37,7 +74,21 @@ class Model:
         except AssertionError():
             print("The layer must have at least 1 neuron.")
 
-    def build(self):
+    def build(self)->None:
+        """
+        Build the network model
+
+        Example
+        -------
+
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+        >>> network.addLayer(neurons=8, activation="relu", label="Hidden layer")
+        >>> network.addLayer(neurons=3, activation="sigmoid", label="Output layer")
+        >>> network.build()
+
+        """
         # build the model
         # Add weights, biaises
         
@@ -47,7 +98,29 @@ class Model:
             # Add weights
             self.layers[i].addWeights(self.layers[i-1].neurons)
 
-    def forward(self, inValues):
+    def forward(self, inValues)->np.array:
+        """
+        Feed forward the network model
+        
+        Parameters
+        ----------
+        inValues: np.array
+            vector containing the input values for the neural network model
+
+        Example
+        -------
+
+        >>> import numpy as np
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+        >>> network.addLayer(neurons=8, activation="relu", label="Hidden layer")
+        >>> network.addLayer(neurons=3, activation="sigmoid", label="Output layer")
+        >>> network.build()
+        >>> inData = np.array([0., 1., 2., 3.])
+        >>> output = network.forward(inData)
+
+        """
         # Simple feeed forward
         
         # Convert to 2D (n, 1) and transpose for dot product
@@ -61,10 +134,19 @@ class Model:
 
     def SGD(self, dataset, alpha:float=0.05, niter:int=1000, momentum:float=0.5)->None:
         """
-        Train
-        :param dataset: a list of tuples in the form (inValues, outValues)
-        :param niter: number of iterations
-        :param alpha: step
+        Train the neural network model
+
+        Parameters
+        ----------
+        dataset: list or np.array
+            a list of tuples in the form (inValues, outValues)
+        niter: int (optional, default: 1000)
+            maximum number of iterations
+        alpha: float (optional, default: 0.05)
+            step for gradient descent
+        momentum: float (optional, default: 0.5)
+            step for the momentum
+
         """
         SGDescent = GradientDescent(dataset, alpha, niter, momentum, self.layers)
         SGDescent.run()
@@ -87,7 +169,3 @@ class Model:
     def show(self):
         # print network structure
         pass
-
-class Backpropagation:
-    # Can set attributes for Layers (gradient weights and biases)
-    pass
