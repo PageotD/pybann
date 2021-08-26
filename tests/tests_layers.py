@@ -49,5 +49,5 @@ class tests_layers(unittest.TestCase):
 
         testLayer.addWeights(inputNeurons=8)
 
-        self.assertTupleEqual(np.shape(testLayer.weights), (8, 4))
-        self.assertTupleEqual(np.shape(testLayer.weightsUpdate), (8, 4))
+        self.assertTupleEqual(np.shape(testLayer.weights), (4, 8))
+        self.assertTupleEqual(np.shape(testLayer.weightsUpdate), (4, 8))
