@@ -6,7 +6,7 @@
 #
 # Then, to run a container:
 #
-# docker run -it --name <name_of_your_container> <name_of_your_image>:<tag>
+# >>> docker run -it --name <name_of_your_container> <name_of_your_image>:<tag>
 #
 
 # Use Python:slim-buster as base-image
@@ -14,7 +14,6 @@ FROM python:slim-buster
 
 # Update packages
 RUN apt update -y
-
 
 # Copy pybann 
 COPY . /app/
@@ -25,7 +24,7 @@ RUN pip3 install -r requirements.txt
 
 # Run pybann
 RUN poetry build 
-RUN pip install dist/pybann-0.1.0.tar.gz
+RUN pip3 install dist/pybann-0.1.0.tar.gz
 
 # Run tests
 RUN python3 -m unittest tests.tests_activation
