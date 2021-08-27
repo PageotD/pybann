@@ -1,6 +1,7 @@
 # Import modules
 import numpy as np
 import pickle
+from tqdm import tqdm
 from pybann import Layer
 from pybann import GradientDescent
 
@@ -91,8 +92,7 @@ class Model:
         """
         # build the model
         # Add weights, biaises
-        
-        for i in range(1, len(self.layers)):
+        for i in tqdm(range(1, len(self.layers)), bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}', desc="Building..."):
             # Add biases
             self.layers[i].addBiases()
             # Add weights
@@ -158,12 +158,26 @@ class Model:
 
     
     def save(self, filename:str="network.bann")->None:
-        # Save using pickle
+        """
+        Save the network model using Pickle
+
+        Parameters
+        ----------
+        filename: str (default: network.bann)
+            filename where to save the network model
+        """
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
     def load(self, filename:str):
-        # Load a saved train network model
+        """
+        Load a network model using Pickle
+
+        Parameters
+        ----------
+        filename: str (default: network.bann)
+            name of the saved network model
+        """
         with open(filename, 'rb') as f:
             self = pickle.load(f)
 

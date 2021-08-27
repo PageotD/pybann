@@ -87,7 +87,7 @@ class GradientDescent:
         :param alpha: step
         """
 
-        for iter in tqdm(range(self.niter), desc="Training..."):
+        for iter in tqdm(range(self.niter), bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}', desc="Training..."):
             # Re-initialize update arrays
             self.initializeUpdate()
 
