@@ -1,6 +1,6 @@
 # Import modules
 import numpy as np
-
+import pickle
 from pybann import Layer
 from pybann import GradientDescent
 
@@ -157,14 +157,15 @@ class Model:
         pass
 
     
-    def save(self):
-        # Save to HDF5 or NetCDF
-        pass
+    def save(self, filename:str="network.bann")->None:
+        # Save using pickle
+        with open(filename, 'wb') as f:
+            pickle.dump(self, f)
 
-    def load(self):
+    def load(self, filename:str):
         # Load a saved train network model
-        # HDF5 or NetCDF
-        pass
+        with open(filename, 'rb') as f:
+            self = pickle.load(f)
 
     def show(self):
         # print network structure
