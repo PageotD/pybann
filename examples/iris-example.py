@@ -47,13 +47,3 @@ for i in range(len(inDataTest)):
 loss /= float(len(inDataTest))
 
 print(loss, (1-loss)*100)
-
-network.save("test_network2")
-#with open("test_network", "wb") as f:
-#    pickle.dump(network, f)
-
-lnet = Model()
-lnet.load("test_network2")
-print(lnet.layers[1].weights)
-#with open("test_network2", "rb") as f:
-#    loaded_network = pickle.load(f)
