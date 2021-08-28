@@ -4,7 +4,7 @@ from pybann import Model
 from pybann import GradientDescent
 
 
-class tests_gradientdescent(unittest.TestCase):
+class tests_gradientdescent_batchsize0(unittest.TestCase):
 
     def test_initialize(self):
 
@@ -26,7 +26,58 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
+        SGD = GradientDescent(dataset, 0, 0.05, 1000, 0.5, testModel.layers)
+
+        self.assertEqual(SGD.alpha, 0.05)
+        self.assertEqual(SGD.niter, 1000)
+        self.assertEqual(SGD.momentum, 0.5)
+
+        self.assertTupleEqual(SGD.dataset[0][0], dataset[0][0])
+        self.assertTupleEqual(SGD.dataset[0][1], dataset[0][1])
+        self.assertTupleEqual(SGD.dataset[1][0], dataset[1][0])
+        self.assertTupleEqual(SGD.dataset[1][1], dataset[1][1])
+        self.assertTupleEqual(SGD.dataset[2][0], dataset[2][0])
+        self.assertTupleEqual(SGD.dataset[2][1], dataset[2][1])
+
+    def test_initialize(self):
+
+        # Create a dataset
+        dataset = []
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+        dataset.append([(1., 1., 0., 0.), (1., 0., 0.)])
+        dataset.append([(0., 1., 1., 0.), (0., 1., 0.)])
+        dataset.append([(0., 0., 1., 1.), (0., 0., 1.)])
+
+        # Create a model
+        testModel = Model()
+
+        # Add Layers
+        testModel.addInput(neurons=4)
+        testModel.addLayer(neurons=8)
+        testModel.addLayer(neurons=3)
+
+        # Build
+        testModel.build()
+
+        # Create Gradient descent instance
+        SGD = GradientDescent(dataset, 10, 0.05, 1000, 0.5, testModel.layers)
 
         self.assertEqual(SGD.alpha, 0.05)
         self.assertEqual(SGD.niter, 1000)
@@ -59,7 +110,7 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
+        SGD = GradientDescent(dataset, 0, 0.05, 1000, 0.5, testModel.layers)
         SGD.initializeUpdate()
 
         self.assertEqual(np.sum(SGD.layers[1].weightsUpdate), 0.)
@@ -92,7 +143,7 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
+        SGD = GradientDescent(dataset, 0, 0.05, 1000, 0.5, testModel.layers)
         inValues, outValues = SGD.dataSplit(dataset[0])
 
         self.assertListEqual(list(inValues[0]), [1., 1., 0., 0.])
@@ -118,7 +169,7 @@ class tests_gradientdescent(unittest.TestCase):
         testModel.build()
 
         # Create Gradient descent instance
-        SGD = GradientDescent(dataset, 0.05, 1000, 0.5, testModel.layers)
+        SGD = GradientDescent(dataset, 0, 0.05, 1000, 0.5, testModel.layers)
         inValues, outValues = SGD.dataSplit(dataset[0])
         activation, transfer = SGD.forward(inValues)
         

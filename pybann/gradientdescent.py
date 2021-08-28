@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 class GradientDescent:
 
-    def __init__(self, dataset, alpha:float, niter:int, momentum:float, layers)->None:
+    def __init__(self, dataset, batchsize:int, alpha:float, niter:int, momentum:float, layers)->None:
         """
         Constructor
         """
@@ -13,6 +13,7 @@ class GradientDescent:
         self.niter = niter
         self.momentum = momentum
         self.layers = layers
+        self.batchsize = batchsize
 
     def initializeUpdate(self):
         """
@@ -31,11 +32,24 @@ class GradientDescent:
         outValues = np.atleast_2d(dataset[1])
         return inValues, outValues
 
-    def forward(self, inValues)->None:
+    def forward(self, inValues)->list:
         """
         Return the output of the neural network for a given 
         input dataset and stores the intermediate results
         (transfer and activation results).
+
+        Parameters
+        ----------
+        inValues: np.array
+            vector containing the input values for the neural network model
+
+        Returns
+        -------
+        activation: np.array
+            activation value for each node
+        transfer: np.array
+            transfer value for each node
+
         """
         # Activation
         activation = [inValues.transpose()]
@@ -82,18 +96,21 @@ class GradientDescent:
     def run(self)->None:
         """
         Train
-        :param dataset: a list of tuples in the form (inValues, outValues)
-        :param niter: number of iterations
-        :param alpha: step
         """
 
         for iter in tqdm(range(self.niter), bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}', desc="Training..."):
             # Re-initialize update arrays
             self.initializeUpdate()
 
-            # Loop over datasets
-            for idata in range(len(self.dataset)):
+            if self.batchsize != 0:
+                # Shuffle dataset
+                np.random.shuffle(self.dataset)
+            else:
+                self.batchsize = len(self.dataset)
 
+            # Loop over datasets
+            for idata in range(self.batchsize):
+                
                 # Split dataset
                 inValues, outValues = self.dataSplit(self.dataset[idata])
 

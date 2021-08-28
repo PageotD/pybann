@@ -37,7 +37,7 @@ with open('data/iris/iris.data', 'r') as f:
                 train = True
 
 print(len(inData), len(inDataTest))
-network.SGD(dataset=inData,alpha=1.e-3, momentum=0.9, niter=2500)
+network.SGD(dataset=inData, batchsize=50, alpha=1.e-3, momentum=0.9, niter=2500)
 
 loss = 0.
 for i in range(len(inDataTest)):
