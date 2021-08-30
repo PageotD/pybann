@@ -9,17 +9,18 @@ artificial neural network.
 import numpy as np
 from typing import Union
 
+
 class Activation:
     """
-    Collection of activation functions commonly used in the design of 
-    artificial neural networks. All methods are statics which means they can be called without
-    creating an instance.
+    Collection of activation functions commonly used in the design of
+    artificial neural networks. All methods are statics which means they
+    can be called without creating an instance.
     """
     def __init__(self):
         pass
 
     @staticmethod
-    def sigmoid(a:Union[float, np.array], deriv:bool=False)->Union[float, np.array]:
+    def sigmoid(a: Union[float, np.array], deriv: bool = False) -> Union[float, np.array]:
         r"""
         Returns the value of the sigmoid function
         (or its derivative).
@@ -71,7 +72,7 @@ class Activation:
         -------
         f: float or np.array
             the value of the function (or its derivative).
-            
+
         Examples
         --------
         >>> x = 0.
@@ -106,7 +107,7 @@ class Activation:
         -------
         f: float or np.array
             the value of the function (or its derivative).
-            
+
         Examples
         --------
         >>> x = 0.
@@ -119,18 +120,17 @@ class Activation:
         array([0., 0., 2.])
         """
         # Add an epsilon value to ensure there is no strict zero values
-        if deriv: x += np.finfo(float).eps
+        if deriv:
+            x += np.finfo(float).eps
 
         if np.ndim(x) != 0:
             if not deriv:
-                f = [a * x[i] if x[i] <=0. else x[i] for i in range(len(x))]
-                #f = np.maximum(x, a * x)
+                f = [a * x[i] if x[i] <= 0. else x[i] for i in range(len(x))]
                 return np.array(f)
             else:
-                #f = [a if x[i] <0. else 1. for i in range(len(x))]
                 f = np.copy(x)
                 f[f < 0.] = a
-                f[f >=0.] = 1.
+                f[f >= 0.] = 1.
                 return f
         else:
             if not deriv:
@@ -142,7 +142,7 @@ class Activation:
     def softplus(x, deriv=False):
         """
         Returns the value of the Softplus function (or its derivative).
-        
+
         Parameters
         ----------
         a: float or numpy array
@@ -154,7 +154,7 @@ class Activation:
         -------
         f: float or np.array
             the value of the function (or its derivative).
-            
+
         Examples
         --------
         >>> x = 0.
@@ -187,7 +187,7 @@ class Activation:
         -------
         f: float or np.array
             the value of the function (or its derivative).
-            
+
         Examples
         --------
         >>> x = 0.

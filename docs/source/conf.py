@@ -12,7 +12,7 @@
 #
 import os
 import sys
-#sys.path.insert(0, os.path.abspath('../'))
+# sys.path.insert(0, os.path.abspath('../'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from numpydoc.docscrape import NumpyDocString
 
@@ -33,8 +33,8 @@ release = '0.1.0'
 # ones.
 extensions = [
     'sphinx.ext.mathjax',
-    'sphinx.ext.todo', 
-    'sphinx.ext.viewcode', 
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
