@@ -3,6 +3,10 @@ from tqdm import tqdm
 
 
 class GradientDescent:
+    """
+    Class to train the neural network using the gradient descent
+    method.
+    """
 
     def __init__(self, dataset, batchsize: int, alpha: float,
                  niter: int, momentum: float, layers) -> None:

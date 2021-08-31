@@ -6,8 +6,8 @@ artificial neural network.
 """
 
 # Import modules
-import numpy as np
 from typing import Union
+import numpy as np
 
 
 class Activation:
@@ -21,7 +21,7 @@ class Activation:
 
     @staticmethod
     def sigmoid(a: Union[float, np.array], deriv: bool = False) -> Union[float, np.array]:
-        r"""
+        """
         Returns the value of the sigmoid function
         (or its derivative).
 
@@ -52,8 +52,8 @@ class Activation:
         f = 1.0 / (1.0 + np.exp(-a))
         if not deriv:
             return f
-        else:
-            return f * (1.0 - f)
+
+        return f * (1.0 - f)
 
     @staticmethod
     def tanhyp(x, deriv=False):
@@ -87,8 +87,8 @@ class Activation:
         f = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
         if not deriv:
             return f
-        else:
-            return 1. - f**2
+
+        return 1. - f**2
 
     @staticmethod
     def relu(x, a=0., deriv=False):
@@ -127,16 +127,16 @@ class Activation:
             if not deriv:
                 f = [a * x[i] if x[i] <= 0. else x[i] for i in range(len(x))]
                 return np.array(f)
-            else:
-                f = np.copy(x)
-                f[f < 0.] = a
-                f[f >= 0.] = 1.
-                return f
+
+            f = np.copy(x)
+            f[f < 0.] = a
+            f[f >= 0.] = 1.
+            return f
         else:
             if not deriv:
                 return a * x if x <= 0. else x
-            else:
-                return a if x < 0. else 1.
+
+            return a if x < 0. else 1.
 
     @staticmethod
     def softplus(x, deriv=False):
@@ -168,8 +168,8 @@ class Activation:
         """
         if not deriv:
             return np.log(1. + np.exp(x))
-        else:
-            return Activation.sigmoid(x)
+
+        return Activation.sigmoid(x)
 
     @staticmethod
     def gaussian(x, deriv=False):
@@ -202,5 +202,5 @@ class Activation:
         f = np.exp(-(x**2))
         if not deriv:
             return f
-        else:
-            return -2 * x * f
+
+        return -2 * x * f
