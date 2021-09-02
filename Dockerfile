@@ -28,7 +28,4 @@ RUN python3 -m build
 RUN pip3 install dist/pybann-0.1.0.tar.gz
 
 # Run tests
-RUN python3 -m unittest tests.tests_activation
-RUN python3 -m unittest tests.tests_layers
-RUN python3 -m unittest tests.tests_model
-RUN python3 -m unittest tests.tests_gradientdescent
+RUN python3 -m unittest discover tests

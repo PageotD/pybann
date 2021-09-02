@@ -131,7 +131,7 @@ class Activation:
 
         result = np.where(wsum >= 0, 1., leak)
         return result
-        
+
     @staticmethod
     def softplus(wsum, deriv=False):
         """
