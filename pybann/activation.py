@@ -22,10 +22,15 @@ class Activation:
 
     @staticmethod
     def sigmoid(wsum: Union[float, np.array], deriv: bool = False) -> Union[float, np.array]:
-        """
-        Returns the value of the sigmoid function
-        (or its derivative).
+        """sigmoid
 
+        Apply the sigmoid activation functions or its derivative to the input values.
+
+        The sigmoid activation function returns near 0 values for input values <-5 and
+        near 1 for input values >5
+
+        The sigmoid derivative is a zero-centered Gaussian-like function returning values
+        between 0 and 0.25.
 
         Parameters
         ----------
@@ -120,25 +125,13 @@ class Activation:
         >>> relu(x)
         array([0., 0., 2.])
         """
-        # Add an epsilon value to ensure there is no strict zero values
-        if deriv:
-            wsum += np.finfo(float).eps
-
-        if np.ndim(wsum) != 0:
-            if not deriv:
-                result = [leak * wsum[i] if wsum[i] <= 0. else wsum[i] for i in range(len(wsum))]
-                return np.array(result)
-
-            result = np.copy(wsum)
-            result[result < 0.] = leak
-            result[result >= 0.] = 1.
+        if not deriv:
+            result = np.where(wsum > 0, wsum, wsum * leak)
             return result
-        else:
-            if not deriv:
-                return leak * wsum if wsum <= 0. else wsum
 
-            return leak if wsum < 0. else 1.
-
+        result = np.where(wsum >= 0, 1., leak)
+        return result
+        
     @staticmethod
     def softplus(wsum, deriv=False):
         """
