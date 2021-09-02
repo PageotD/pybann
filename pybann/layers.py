@@ -1,10 +1,13 @@
-# Import modules
+"""layers.py
+"""
 import numpy as np
 from pybann import Activation
 
 
 class Layer:
-
+    """
+    Layer class allows to add layers to the neural network model.
+    """
     def __init__(self, neurons: int, label: str = "") -> None:
 
         try:

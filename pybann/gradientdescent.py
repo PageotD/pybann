@@ -1,3 +1,5 @@
+"""gradientdescent.py
+"""
 import numpy as np
 from tqdm import tqdm
 from typing import Union
@@ -9,13 +11,11 @@ class GradientDescent:
     """
 
     def __init__(self, dataset, batchsize: int, alpha: float,
-                 niter: int, momentum: float, layers) -> None:
-        """
-        Constructor
-        """
+                 nepoch: int, momentum: float, layers) -> None:
+
         self.dataset = dataset
         self.alpha = alpha
-        self.niter = niter
+        self.nepoch = nepoch
         self.momentum = momentum
         self.layers = layers
         self.batchsize = batchsize
@@ -117,7 +117,7 @@ class GradientDescent:
         Train
         """
 
-        for iter in tqdm(range(self.niter),
+        for epoch in tqdm(range(self.nepoch),
                          bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}',
                          desc="Training..."):
             # Re-initialize update arrays

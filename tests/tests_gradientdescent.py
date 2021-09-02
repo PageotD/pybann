@@ -29,7 +29,7 @@ class tests_gradientdescent_batchsize0(unittest.TestCase):
         SGD = GradientDescent(dataset, 0, 0.05, 1000, 0.5, testModel.layers)
 
         self.assertEqual(SGD.alpha, 0.05)
-        self.assertEqual(SGD.niter, 1000)
+        self.assertEqual(SGD.nepoch, 1000)
         self.assertEqual(SGD.momentum, 0.5)
 
         self.assertTupleEqual(SGD.dataset[0][0], dataset[0][0])
@@ -80,7 +80,7 @@ class tests_gradientdescent_batchsize0(unittest.TestCase):
         SGD = GradientDescent(dataset, 10, 0.05, 1000, 0.5, testModel.layers)
 
         self.assertEqual(SGD.alpha, 0.05)
-        self.assertEqual(SGD.niter, 1000)
+        self.assertEqual(SGD.nepoch, 1000)
         self.assertEqual(SGD.momentum, 0.5)
 
         self.assertTupleEqual(SGD.dataset[0][0], dataset[0][0])

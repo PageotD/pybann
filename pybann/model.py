@@ -138,7 +138,7 @@ class Model:
         return inValues.flatten()
 
     def SGD(self, dataset, batchsize=0, alpha: float = 0.05,
-            niter: int = 1000, momentum: float = 0.5) -> None:
+            nepoch: int = 1000, momentum: float = 0.5) -> None:
         """
         Train the neural network model
 
@@ -148,7 +148,7 @@ class Model:
             a list of tuples in the form (inValues, outValues)
         batchsize: int (optional)
             size of minibatches for training
-        niter: int (optional, default: 1000)
+        nepoch: int (optional, default: 1000)
             maximum number of iterations
         alpha: float (optional, default: 0.05)
             step for gradient descent
