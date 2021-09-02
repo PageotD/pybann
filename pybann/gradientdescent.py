@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-
+from typing import Union
 
 class GradientDescent:
     """
@@ -37,7 +37,7 @@ class GradientDescent:
         outValues = np.atleast_2d(dataset[1])
         return inValues, outValues
 
-    def forward(self, inValues) -> list:
+    def forward(self, inValues) -> Union[list, list]:
         """
         Return the output of the neural network for a given
         input dataset and stores the intermediate results

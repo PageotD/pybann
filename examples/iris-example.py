@@ -1,5 +1,4 @@
 import numpy as np
-import pickle
 from pybann import Model
 
 #import network
@@ -36,7 +35,7 @@ with open('data/iris/iris.data', 'r') as f:
                 inDataTest.append(list((inValues, attempted)))
                 train = True
 
-network.SGD(dataset=inData, batchsize=50, alpha=1.e-3, momentum=0.9, niter=2500)
+network.SGD(dataset=inData, batchsize=50, alpha=1.e-3, momentum=0.9, niter=1000)
 
 loss = 0.
 for i in range(len(inDataTest)):
