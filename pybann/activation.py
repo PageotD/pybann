@@ -139,7 +139,7 @@ class Activation:
 
         Parameters
         ----------
-        a: float or numpy array
+        wsum: float or numpy array
             input value(s)
         deriv: bool, default: False
             when `True`, returns the derivative
@@ -172,7 +172,7 @@ class Activation:
 
         Parameters
         ----------
-        a: float or numpy array
+        wsum: float or numpy array
             input value(s)
         deriv: bool, default: False
             when `True`, returns the derivative

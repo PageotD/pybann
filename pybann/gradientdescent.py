@@ -1,8 +1,10 @@
 """gradientdescent.py
 """
+
+from typing import Union
 import numpy as np
 from tqdm import tqdm
-from typing import Union
+
 
 class GradientDescent:
     """
@@ -20,7 +22,7 @@ class GradientDescent:
         self.layers = layers
         self.batchsize = batchsize
 
-    def initializeUpdate(self):
+    def init_update(self):
         """
         Initialize weights and biases update array to zero
         """
@@ -28,16 +30,16 @@ class GradientDescent:
             self.layers[ilayer].weightsUpdate[:] = 0.
             self.layers[ilayer].biasesUpdate[:] = 0.
 
-    def dataSplit(self, dataset):
+    def datasplit(self, dataset):
         """
         Split the data in input and output array
         """
         # Get input and output
-        inValues = np.atleast_2d(dataset[0])
-        outValues = np.atleast_2d(dataset[1])
-        return inValues, outValues
+        invalues = np.atleast_2d(dataset[0])
+        outvalues = np.atleast_2d(dataset[1])
+        return invalues, outvalues
 
-    def forward(self, inValues) -> Union[list, list]:
+    def forward(self, invalues) -> Union[list, list]:
         """
         Return the output of the neural network for a given
         input dataset and stores the intermediate results
@@ -45,7 +47,7 @@ class GradientDescent:
 
         Parameters
         ----------
-        inValues: np.array
+        invalues: np.array
             vector containing the input values for the neural network model
 
         Returns
@@ -57,7 +59,7 @@ class GradientDescent:
 
         """
         # Activation
-        activation = [inValues.transpose()]
+        activation = [invalues.transpose()]
         transfer = []
 
         # Feed Forward
@@ -69,14 +71,14 @@ class GradientDescent:
 
         return activation, transfer
 
-    def backward(self, activation, transfer, outValues) -> None:
+    def backward(self, activation, transfer, outvalues) -> None:
         """
         Calculates the gradient for each weight matrix and biase vector
         of the neural network.
         """
         # Backward
         delta = (activation[-1] -
-            outValues.transpose()) * self.layers[-1].activation(transfer[-1], deriv=True)
+            outvalues.transpose()) * self.layers[-1].activation(transfer[-1], deriv=True)
         self.layers[-1].weightsUpdate += np.dot(
             delta, activation[-2].transpose())
         self.layers[-1].biasesUpdate += delta
@@ -121,7 +123,7 @@ class GradientDescent:
                          bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}',
                          desc="Training..."):
             # Re-initialize update arrays
-            self.initializeUpdate()
+            self.init_update()
 
             if self.batchsize != 0:
                 # Shuffle dataset
@@ -133,13 +135,13 @@ class GradientDescent:
             for idata in range(self.batchsize):
 
                 # Split dataset
-                inValues, outValues = self.dataSplit(self.dataset[idata])
+                invalues, outvalues = self.datasplit(self.dataset[idata])
 
                 # Feed forward
-                activation, transfer = self.forward(inValues)
+                activation, transfer = self.forward(invalues)
 
                 # Feed backward
-                self.backward(activation, transfer, outValues)
+                self.backward(activation, transfer, outvalues)
 
             # Update
             self.update()
