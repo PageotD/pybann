@@ -18,7 +18,7 @@ class Layer:
 
         self.label = label
 
-    def addActivation(self, activation: str = "sigmoid") -> None:
+    def add_activation(self, activation: str = "sigmoid") -> None:
         """
         Add an activation function to the Layer object
 
@@ -32,19 +32,19 @@ class Layer:
 
         >>> from pybann import Layer
         >>> layer1 = Layer(neurons=4)
-        >>> layer1.addActivation()
+        >>> layer1.add_activation()
         >>> layer1.activation.__name__
         sigmoid
 
         >>> layer2 = Layer(neurons=4)
-        >>> layer2.addActivation(activation="relu")
+        >>> layer2.add_activation(activation="relu")
         >>> layer2.activation.__name__
         relu
 
         """
         self.__setattr__('activation', getattr(Activation, activation))
 
-    def addWeights(self, inputNeurons: int) -> None:
+    def add_weights(self, inputNeurons: int) -> None:
         """
         Add weight matrix for the feed forward, and updated weight matrices
         for the gradient descent.
@@ -60,7 +60,7 @@ class Layer:
         >>> import numpy as np
         >>> from pybann import Layer
         >>> layer1 = Layer(neurons=4)
-        >>> layer1.addWeights(inputNeurons=8)
+        >>> layer1.add_weights(inputNeurons=8)
         >>> np.shape(layer1.weights)
         (4, 8)
         >>> np.shape(layer1.weightsUpdate)
@@ -76,7 +76,7 @@ class Layer:
         self.__setattr__('weightsUpdateSave', np.zeros((
             self.neurons, inputNeurons)))
 
-    def addBiases(self) -> None:
+    def add_biases(self) -> None:
         """
         Add biase vector for the feed forward, and updated biase vectors
         for the gradient descent.
@@ -84,7 +84,7 @@ class Layer:
         >>> import numpy as np
         >>> from pybann import Layer
         >>> layer1 = Layer(neurons=4)
-        >>> layer1.addBiases()
+        >>> layer1.add_biases()
         >>> np.shape(layer1.biases)
         (4,1)
 

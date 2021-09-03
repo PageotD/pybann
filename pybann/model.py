@@ -73,7 +73,7 @@ class Model:
             # Assert the number of neurons is at least 1
             assert neurons >= 1
             self.layers.append(Layer(neurons, label))
-            self.layers[-1].addActivation(activation)
+            self.layers[-1].add_activation(activation)
 
         except AssertionError():
             print("The layer must have at least 1 neuron.")
@@ -99,9 +99,9 @@ class Model:
                       bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}',
                       desc="Building..."):
             # Add biases
-            self.layers[i].addBiases()
+            self.layers[i].add_biases()
             # Add weights
-            self.layers[i].addWeights(self.layers[i-1].neurons)
+            self.layers[i].add_weights(self.layers[i-1].neurons)
 
     def forward(self, inValues) -> np.array:
         """
