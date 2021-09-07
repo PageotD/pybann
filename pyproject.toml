@@ -6,7 +6,7 @@ authors = ["Damien Pageot <74134372+PageotD@users.noreply.github.com>"]
 license = "BSD 3-Clause"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 numpy = "^1.21.1"
 tdqm = "^0.0.1"
 
