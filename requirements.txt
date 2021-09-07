@@ -1,7 +1,0 @@
-numpydoc>=1.1.0
-numpy>=1.21.1
-matplotlib>=3.4.2
-tqdm>=4.62.1
-sphinx>=4.1.2
-poetry>=1.1.7
-pydata-sphinx-theme
