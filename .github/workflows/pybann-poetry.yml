@@ -1,4 +1,4 @@
-name: CI Pipeline for summarize_df
+name: Python 3.8
 
 on:
   push:
