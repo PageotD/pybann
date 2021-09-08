@@ -9,6 +9,7 @@ license = "BSD 3-Clause"
 python = "^3.8"
 numpy = "^1.21.1"
 tdqm = "^0.0.1"
+pdoc = "^7.4.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.2"

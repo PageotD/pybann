@@ -1,5 +1,5 @@
 """
-PyBANN
+PyBANN is a Python Basic Artificial Neural Network.
 """
 
 from .activation import Activation
