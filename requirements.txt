@@ -1,0 +1,7 @@
+numpy>=1.21.1
+tdqm>=0.0.1
+pdoc>= 7.4.0
+flake8>=3.9.2
+pylint>=2.9.6
+tox>=3.24.3
+build>=0.7.0
