@@ -14,7 +14,23 @@ class GradientDescent:
 
     def __init__(self, dataset, batchsize: int, alpha: float,
                  nepoch: int, momentum: float, layers) -> None:
+        """
+        Initialize the gradient descent class
+        
+        Parameters
+        ----------
+        dataset: list or np.array
+            a list of tuples in the form (inValues, outValues)
+        batchsize: int, optional
+            size of minibatches for training
+        nepoch: int, optional
+            maximum number of iterations (default: 1000)
+        alpha: float, optional
+            step for gradient descent (default: 0.05)
+        momentum: float, optional
+            step for the momentum (default: 0.5)
 
+        """
         self.dataset = dataset
         self.alpha = alpha
         self.nepoch = nepoch
@@ -24,15 +40,15 @@ class GradientDescent:
 
     def init_update(self):
         """
-        Initialize weights and biases update array to zero
+        Initialize weights and biases update array to zero.
         """
         for ilayer in range(1, len(self.layers)):
-            self.layers[ilayer].weightsUpdate[:] = 0.
+            self.layers[ilayer].weightsUpdate[:, :] = 0.
             self.layers[ilayer].biasesUpdate[:] = 0.
 
     def datasplit(self, dataset):
         """
-        Split the data in input and output array
+        Split the data in input and output array.
         """
         # Get input and output
         invalues = np.atleast_2d(dataset[0])

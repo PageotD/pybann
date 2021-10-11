@@ -26,7 +26,7 @@ class Model:
         ----------
         neurons: int
             number of neurons in the input layer
-        label: str (optional)
+        label: str, optional
             label (name) of the layer
 
         Examples
@@ -55,9 +55,9 @@ class Model:
         ----------
         neurons: int
             number of neurons in the layer
-        activation: str (optional, default:"sigmoid)
-            activation function for the layer
-        label: str (optional)
+        activation: str, optional
+            activation function for the layer (default: 'sigmoid')
+        label: str, optional
             label (name) of the layer
 
         Examples
@@ -146,14 +146,14 @@ class Model:
         ----------
         dataset: list or np.array
             a list of tuples in the form (inValues, outValues)
-        batchsize: int (optional)
+        batchsize: int, optional
             size of minibatches for training
-        nepoch: int (optional, default: 1000)
-            maximum number of iterations
-        alpha: float (optional, default: 0.05)
-            step for gradient descent
-        momentum: float (optional, default: 0.5)
-            step for the momentum
+        nepoch: int, optional
+            maximum number of iterations (default: 1000)
+        alpha: float, optional
+            step for gradient descent (default: 0.05)
+        momentum: float, optional
+            step for the momentum (default: 0.5)
 
         """
         SGDescent = GradientDescent(dataset, batchsize,
@@ -171,8 +171,8 @@ class Model:
 
         Parameters
         ----------
-        filename: str (default: network.bann)
-            filename where to save the network model
+        filename: str 
+            filename where to save the network model (default: 'network.bann')
         """
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
@@ -183,8 +183,8 @@ class Model:
 
         Parameters
         ----------
-        filename: str (default: network.bann)
-            name of the saved network model
+        filename: str 
+            name of the saved network model (default: 'network.bann')
         """
         with open(filename, 'rb') as f:
             self = pickle.load(f)

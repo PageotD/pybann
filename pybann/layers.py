@@ -24,8 +24,8 @@ class Layer:
 
         Parameters
         ----------
-        activation: str (optional)
-            name of the activation function (default `sigmoid`)
+        activation: str, optional
+            name of the activation function (default: 'sigmoid')
 
         Examples
         --------
