@@ -157,7 +157,7 @@ class Model:
 
         """
         SGDescent = GradientDescent(dataset, batchsize,
-                                    alpha, niter, momentum, self.layers)
+                                    alpha, nepoch, momentum, self.layers)
         SGDescent.run()
 
     def PSO(self):
@@ -173,6 +173,19 @@ class Model:
         ----------
         filename: str 
             filename where to save the network model (default: 'network.bann')
+        
+        Example
+        -------
+
+        >>> import numpy as np
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+        >>> network.addLayer(neurons=8, activation="relu", label="Hidden layer")
+        >>> network.addLayer(neurons=3, activation="sigmoid", label="Output layer")
+        >>> network.build()
+        >>> network.save("network_example_save.bann")
+        
         """
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
