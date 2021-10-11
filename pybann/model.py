@@ -4,7 +4,7 @@ import pickle
 from tqdm import tqdm
 from pybann import Layer
 from pybann import GradientDescent
-
+from pybann import ParticleSwarm
 
 class Model:
 
@@ -140,7 +140,7 @@ class Model:
     def SGD(self, dataset, batchsize=0, alpha: float = 0.05,
             nepoch: int = 1000, momentum: float = 0.5) -> None:
         """
-        Train the neural network model
+        Train the neural network model using the gradient descent method
 
         Parameters
         ----------
@@ -157,13 +157,36 @@ class Model:
 
         """
         SGDescent = GradientDescent(dataset, batchsize,
-                                    alpha, niter, momentum, self.layers)
+                                    alpha, nepoch, momentum, self.layers)
         SGDescent.run()
 
-    def PSO(self):
-        # particle swarm optimization
-        # Need PSO class with options
-        pass
+    def PSO(self, dataset, batchsize: int=0, coef0: float=0.4, coef1: float=2.1, coef2: float=2.1, 
+            topology: str='full', particles: int=200, nepoch: int=1000) -> None:
+        """
+        Train the neural network model using particle swarm optimization method
+
+        Parameters
+        ----------
+        dataset: list or np.array
+            a list of tuples in the form (inValues, outValues)
+        batchsize: int (optional)
+            size of minibatches for training
+        nepoch: int (optional, default: 1000)
+            maximum number of iterations
+        coef0: float (optional, default:0.4)
+            inertia weight
+        coef1: float (optional, default: 2.1)
+            social behaviour parameter
+        coef2: float (optional, default: 2.1)
+            cognitive behaviour parameter
+        topology: str (optional, default: 'full')
+            topology
+        particles: int (optional, default: 200)
+            number of particles in the swarm
+        """
+
+        PSoptimization = ParticleSwarm(dataset, batchsize, coef0, coef1, coef2, topology, particles, nepoch, self.layers)
+        PSoptimization.run()
 
     def save(self, filename: str = "network.bann") -> None:
         """

@@ -5,6 +5,7 @@ Particle Swarm Optimization
 from typing import Union
 import numpy as np
 from tqdm import tqdm
+from copy import deepcopy
 
 class ParticleSwarm:
     """
@@ -14,157 +15,44 @@ class ParticleSwarm:
     topologies are lso implemented: *full*, *ring* and *toroidal*.
     """
 
-    def __init__(self):
+    def __init__(self, dataset, batchsize: int, omega: int, cog: float, soc: float,
+                 topology: str, nparticles: int, nepoch: int, layers) -> None:
+
+        self.dataset = dataset
+        self.nepoch = nepoch
+        self.layers = layers
+        self.batchsize = batchsize
+        self.omega = omega
+        self.cog = cog
+        self.soc = soc
+        self.topology = topology
+        self.nparticles = nparticles 
+
+        self.current = None
+        self.velocity = None
+        self.history = None
+        self.misfit = None
+        self.pspace = None
+
+    def init_particles(self):
+
+        self.particles = []
+        
+        for iparticle in range(self.nparticles):
+            # Create a copy of the neural network
+            tmp = deepcopy(self.layers)
+            # Redifine initial weights and biases
+            for ilayer in range(1, len(self.layers)):
+                tmp[ilayer].weights = np.random.randn(*np.shape(tmp[ilayer].weights))
+                tmp[ilayer].biases = np.random.randn(*np.shape(tmp[ilayer].biases))
+            # Add
+            self.particles.append(tmp)
+
+    def run(self):
         """
-        Initialize the Swarm class.
+        Train
         """
-        self.current = np.zeros((1, 1, 3), dtype=np.float32)
-        self.velocity = np.zeros((1, 1, 3), dtype=np.float32)
-        self.history = np.zeros((1, 1, 3), dtype=np.float32)
-        self.misfit = np.zeros(1, dtype=np.float32)
-        self.pspace = np.zeros((1, 1, 3), dtype=np.float32)
-
-    def init_pspace(self, **options):
-        """
-        Initialiaze parameter space from file
-
-        :param npts: number of independant points
-        :param npar: number of parameter per points
-        :param fmod: input file containing the boundaries of the parameter space.
-
-        If `fmod` exists, ``npts`` and ``npar`` are deduced from file. Else, an empty
-        parameter space is intialize (with ``npts`` and ``npar`` provided by the
-        user).
-
-        .. rubric:: Basic usage
-
-        >>> #Import PSO method from NeSSI
-        >>> from nessi.globopt import Swarm
-        >>> # Create a Swarm object
-        >>> swarm = Swarm()
-        >>> # Initialize an empty pspace using `npts` and `npar`
-        >>> swarm.init_pspace(npts=1, npar=2)
-        >>> swarm.pspace
-        array([[[0., 0., 0.],
-                [0., 0., 0.]]], dtype=float32)
-
-        """
-
-        # Get parameters
-        npts = options.get('npts', 1)
-        npar = options.get('npar', 1)
-        fmod = options.get('fmod', ' ')
-
-        if fmod == ' ':
-            # Initialize an empty pspace array of size (npts, npar)
-            self.pspace.resize(npts, npar, 3)
-        else:
-            # Initialize the pspace array from file
-            # Load pspace file in a temporary array
-            tmp = np.loadtxt(fmod, ndmin=2, comments='#')
-
-            # Check the number of points per particule
-            npts = tmp.shape[0]
-            npar = int(tmp.shape[1]/3)
-
-            # Resize pspace array
-            self.pspace.resize(npts, npar, 3)
-
-            # Fill pspace array
-            i = 0
-            for ipar in range(0, npar):
-                self.pspace[:, ipar, :] = tmp[:, i:i+3]
-                i += 3
-
-    def init_particles(self, nindv, ncvt=0):
-        """
-        Initialize all the particles of the swarm at random position in the
-        parameter space.
-
-        :param nindv: integer, number of particles
-        :param ncvt: integer, number of iteration for centroidal Voronoi
-            tessellation (McQueen algorithm)
-
-        .. rubric:: Basic usage
-
-        >>> # Import the Swarm module
-        >>> from nessi.globopt import Swarm
-        >>> # Initialize the swarm
-        >>> swarm = Swarm()
-        >>> # Initialize an empty parameter space
-        >>> swarm.init_pspace(npts=1, npar=1)
-        >>> # Edit the parameter space
-        >>> # The unknown is set to be between -1 and 1 with a maximum velocity
-        >>> # of 0.2
-        >>> swarm.pspace[0, 0, 0] = -1.
-        >>> swarm.pspace[0, 0, 1] = 1.
-        >>> swarm.pspace[0, 0, 2] = 0.2
-        >>> # Initialize population with 10 particles
-        >>> swarm.init_particles(10)
-        >>> swarm.current
-        array([[[ 0.9879148 ]],
-               [[-0.2595402 ]],
-               [[-0.85254925]],
-               [[ 0.9707204 ]],
-               [[-0.5316951 ]],
-               [[-0.4493006 ]],
-               [[-0.638056  ]],
-               [[ 0.4990087 ]],
-               [[ 0.9022976 ]],
-               [[-0.2530524 ]]], dtype=float32)
-
-        """
-
-        # Get the number of points and the number of parameters from pspace
-        npts = self.pspace.shape[0]
-        npar = self.pspace.shape[1]
-
-        # Resize arrays
-        self.current.resize(nindv, npts, npar)
-        self.velocity.resize(nindv, npts, npar)
-        self.history.resize(nindv, npts, npar)
-        self.misfit.resize(nindv)
-
-        # Initialize arrays
-        self.current[:, :, :] = 0.
-        self.velocity[:, :, :] = 0.
-        self.history[:, :, :] = 0.
-        self.misfit[:] = 0.
-
-        # Random generation of particle position
-        for indv in range(0, nindv):
-            p_random = np.random.random_sample((npts, npar))
-            self.current[indv, :, :] = self.pspace[:, :, 0]\
-                + p_random*(self.pspace[:, :, 1]-self.pspace[:, :, 0])
-
-        # Centroidal Voronoi tessellation
-        if ncvt > 0:
-            # Initialize
-            j = np.zeros(nindv, dtype=np.float32)
-            j[:] = 1.
-            # Create temporary particle array
-            qtmp = np.zeros((npts, npar), dtype=np.float32)
-            # Loop over iterations
-            for it in range(0, ncvt):
-                # Random individual
-                p_random = np.random.random_sample((npts, npar))
-                qtmp[:, :] = self.pspace[:, :, 0]\
-                    + p_random*(self.pspace[:, :, 1]-self.pspace[:, :, 0])
-                # Calculate distance
-                d = np.zeros(nindv, dtype=np.float32)
-                for indv in range(0, nindv):
-                    for ipts in range(0,npts):
-                        for ipar in range(0, npar):
-                            if(self.pspace[ipts, ipar, 2] > 0.):
-                                d[indv] += ((self.current[indv,ipts,ipar]-qtmp[ipts,ipar])/self.pspace[ipts,ipar,1])**2
-                d[:] = np.sqrt(d[:])
-                # Search closest individual
-                iclose = np.argmin(d)
-                # Correct position
-                for ipts in range(0, npts):
-                    for ipar in range(0, npar):
-                        self.current[iclose,ipts,ipar] = (j[iclose]*self.current[iclose,ipts,ipar]+qtmp[ipts,ipar])/(j[iclose]+1.)
-                j[iclose] += 1.
+        self.init_particles()
 
     def _get_neighbors(self, topology, indv, ndim):
         """
@@ -415,118 +303,8 @@ class ParticleSwarm:
                         if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
                             self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
 
-    def bbupdate(self, **kwargs):
+    def run(self):
         """
-        Bare bone PSO update.
-
-        :param topology: used topology (default 'full'): full, ring, ringx, toroidal, toroidalx
-        :param ndim: number of particles in the first dimension if toroidal topology is used
-        :param pupd: parameter update probability
+        Train the artificial neural network using particle swarm optimization
         """
-
-        # Parse kwargs parameter list
-        topology = kwargs.get('topology', 'full')
-        ndim = kwargs.get('ndim', 0)
-        pupd = kwargs.get('pupd', 1.0)
-
-        # Update process
-        for indv in range(0, self.current.shape[0]):
-            gbest = self.get_gbest(topology, indv, ndim)
-            for ipts in range(0, self.pspace.shape[0]):
-                # Test if parameter will be updated
-                if np.random.random_sample() <= pupd:
-                    for ipar in range(0, self.pspace.shape[1]):
-
-                        # Get values
-                        current = self.current[indv, ipts, ipar]
-                        velocity = self.velocity[indv, ipts, ipar]
-                        history = self.history[indv, ipts, ipar]
-
-                        # Normal distribution parameters
-                        loc = (gbest[ipts, ipar]+history)/2.
-                        sca = np.abs(gbest[ipts, ipar]-history)
-
-                        # Update position vector
-                        if sca > 0. :
-                            self.current[indv, ipts, ipar] = np.random.normal(loc=loc, scale=sca)
-
-                        # Check if particle is in parameter space
-                        if(self.current[indv, ipts, ipar] < self.pspace[ipts, ipar, 0]):
-                            self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 0]
-                        if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
-                            self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
-
-
-    def fiupdate(self, **kwargs):
-        """
-        Fully Informed PSO update.
-
-        :param control: 0 for weight (default), 1 for constriction
-        :param c_0: value of the control parameter (default 0.7298)
-        :param c_1: value of the acceleration parameter (default 4.1)
-        :param topology: used topology (default 'full'): full, ring, toroidal
-        :param ndim: number of particles in the first dimension if toroidal topology is used
-        :param weight: weight to apply to neighbors: flat, misfit
-        :param pupd: parameter update probability
-        """
-
-        # Parse kwargs parameter list
-        ctrl = kwargs.get('control', 0)
-        omega = kwargs.get('c_0', 0.7298)
-        topology = kwargs.get('topology', 'full')
-        ndim = kwargs.get('ndim', 0)
-        weight = kwargs.get('weight', 'flat')
-        pupd = kwargs.get('pupd', 1.0)
-
-        if ctrl == 0:
-            acc = kwargs.get('c_1', 4.10)
-        if ctrl == 1:
-            acc = omega*kwargs.get('c_1', 4.10)
-
-        # Update process
-        for indv in range(0, self.current.shape[0]):
-            # Get the neighbourhood of the particle
-            neighborhood = self._get_neighbors(topology, indv, ndim)
-            for ipts in range(0, self.pspace.shape[0]):
-                # Test if parameter will be updated
-                if np.random.random_sample() <= pupd:
-                    for ipar in range(0, self.pspace.shape[1]):
-
-                        # Get values
-                        current = self.current[indv, ipts, ipar]
-                        velocity = self.velocity[indv, ipts, ipar]
-                        history = self.history[indv, ipts, ipar]
-
-                        # Update velocity vector
-                        nneighbor = len(neighborhood)
-                        w = np.zeros(nneighbor, dtype=np.float32)
-                        if weight == 'flat':
-                            w[:] = 1.
-                        if weight == 'misfit':
-                            for ineighbor in range(0, nneighbor):
-                                ii = neighborhood[ineighbor]
-                                w[ineighbor] = 1./self.misfit[ii]
-                        pnum = 0.
-                        pden = 0.
-                        for ineighbor in range(0, nneighbor):
-                            ii = neighborhood[ineighbor]
-                            r = np.random.random_sample()/float(nneighbor)
-                            pnum += r*acc*w[ineighbor]*(self.history[ii, ipts, ipar])
-                            pden += r*acc*w[ineighbor] #r*acc*w[ineighbor]
-
-                            self.velocity[indv, ipts, ipar] = omega*velocity+acc*((pnum/pden)-current)
-
-                        # Check particle velocity
-                        if(np.abs(self.velocity[indv, ipts, ipar]) > self.pspace[ipts, ipar, 2]):
-                            self.velocity[indv, ipts, ipar] = \
-                                np.sign(self.velocity[indv, ipts, ipar])\
-                                * self.pspace[ipts, ipar, 2]
-
-                        # Update particle position
-                        self.current[indv, ipts, ipar] += self.velocity[indv, ipts, ipar]
-
-                        # Check if particle is in parameter space
-                        if(self.current[indv, ipts, ipar] < self.pspace[ipts, ipar, 0]):
-                            self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 0]
-                        if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
-                            self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
+        pass

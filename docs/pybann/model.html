@@ -91,7 +91,7 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">from</span> <span class="nn">pybann</span> <span class="kn">import</span> <span class="n">Layer</span>
 <span class="kn">from</span> <span class="nn">pybann</span> <span class="kn">import</span> <span class="n">GradientDescent</span>
-
+<span class="kn">from</span> <span class="nn">pybann</span> <span class="kn">import</span> <span class="n">ParticleSwarm</span>
 
 <span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
 
@@ -227,7 +227,7 @@
     <span class="k">def</span> <span class="nf">SGD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">momentum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Train the neural network model</span>
+<span class="sd">        Train the neural network model using the gradient descent method</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -244,13 +244,34 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">SGDescent</span> <span class="o">=</span> <span class="n">GradientDescent</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span>
-                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
         <span class="n">SGDescent</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># particle swarm optimization</span>
-        <span class="c1"># Need PSO class with options</span>
-        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coef0</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">coef1</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> 
+            <span class="n">topology</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the neural network model using particle swarm optimization method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset: list or np.array</span>
+<span class="sd">            a list of tuples in the form (inValues, outValues)</span>
+<span class="sd">        batchsize: int (optional)</span>
+<span class="sd">            size of minibatches for training</span>
+<span class="sd">        nepoch: int (optional, default: 1000)</span>
+<span class="sd">            maximum number of iterations</span>
+<span class="sd">        coef0: float (optional, default:0.4)</span>
+<span class="sd">            inertia weight</span>
+<span class="sd">        coef1: float (optional, default: 2.1)</span>
+<span class="sd">            social behaviour parameter</span>
+<span class="sd">        coef2: float (optional, default: 2.1)</span>
+<span class="sd">            cognitive behaviour parameter</span>
+<span class="sd">        topology: str (optional, default: &#39;full&#39;)</span>
+<span class="sd">            topology</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PSoptimization</span> <span class="o">=</span> <span class="n">ParticleSwarm</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span> <span class="n">coef0</span><span class="p">,</span> <span class="n">coef1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">,</span> <span class="n">topology</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+        
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;network.bann&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -429,7 +450,7 @@
     <span class="k">def</span> <span class="nf">SGD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">momentum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Train the neural network model</span>
+<span class="sd">        Train the neural network model using the gradient descent method</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -446,13 +467,34 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">SGDescent</span> <span class="o">=</span> <span class="n">GradientDescent</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span>
-                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
         <span class="n">SGDescent</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># particle swarm optimization</span>
-        <span class="c1"># Need PSO class with options</span>
-        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coef0</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">coef1</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> 
+            <span class="n">topology</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the neural network model using particle swarm optimization method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset: list or np.array</span>
+<span class="sd">            a list of tuples in the form (inValues, outValues)</span>
+<span class="sd">        batchsize: int (optional)</span>
+<span class="sd">            size of minibatches for training</span>
+<span class="sd">        nepoch: int (optional, default: 1000)</span>
+<span class="sd">            maximum number of iterations</span>
+<span class="sd">        coef0: float (optional, default:0.4)</span>
+<span class="sd">            inertia weight</span>
+<span class="sd">        coef1: float (optional, default: 2.1)</span>
+<span class="sd">            social behaviour parameter</span>
+<span class="sd">        coef2: float (optional, default: 2.1)</span>
+<span class="sd">            cognitive behaviour parameter</span>
+<span class="sd">        topology: str (optional, default: &#39;full&#39;)</span>
+<span class="sd">            topology</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PSoptimization</span> <span class="o">=</span> <span class="n">ParticleSwarm</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span> <span class="n">coef0</span><span class="p">,</span> <span class="n">coef1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">,</span> <span class="n">topology</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+        
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;network.bann&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -787,7 +829,7 @@ vector containing the input values for the neural network model</li>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">SGD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">momentum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Train the neural network model</span>
+<span class="sd">        Train the neural network model using the gradient descent method</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -804,13 +846,13 @@ vector containing the input values for the neural network model</li>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">SGDescent</span> <span class="o">=</span> <span class="n">GradientDescent</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span>
-                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+                                    <span class="n">alpha</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="n">momentum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
         <span class="n">SGDescent</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>Train the neural network model</p>
+            <div class="docstring"><p>Train the neural network model using the gradient descent method</p>
 
 <h6 id="parameters">Parameters</h6>
 
@@ -835,20 +877,70 @@ step for the momentum</li>
 
         
             <span class="def">def</span>
-            <span class="name">PSO</span><span class="signature">(self)</span>:
+            <span class="name">PSO</span><span class="signature">(
+    self,
+    dataset,
+    batchsize: int = 0,
+    coef0: float = 0.4,
+    coef1: float = 2.1,
+    coef2: float = 2.1,
+    topology: str = &#39;full&#39;,
+    nepoch: int = 1000
+) -&gt; None</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># particle swarm optimization</span>
-        <span class="c1"># Need PSO class with options</span>
-        <span class="k">pass</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">PSO</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coef0</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">coef1</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> 
+            <span class="n">topology</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the neural network model using particle swarm optimization method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset: list or np.array</span>
+<span class="sd">            a list of tuples in the form (inValues, outValues)</span>
+<span class="sd">        batchsize: int (optional)</span>
+<span class="sd">            size of minibatches for training</span>
+<span class="sd">        nepoch: int (optional, default: 1000)</span>
+<span class="sd">            maximum number of iterations</span>
+<span class="sd">        coef0: float (optional, default:0.4)</span>
+<span class="sd">            inertia weight</span>
+<span class="sd">        coef1: float (optional, default: 2.1)</span>
+<span class="sd">            social behaviour parameter</span>
+<span class="sd">        coef2: float (optional, default: 2.1)</span>
+<span class="sd">            cognitive behaviour parameter</span>
+<span class="sd">        topology: str (optional, default: &#39;full&#39;)</span>
+<span class="sd">            topology</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PSoptimization</span> <span class="o">=</span> <span class="n">ParticleSwarm</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batchsize</span><span class="p">,</span> <span class="n">coef0</span><span class="p">,</span> <span class="n">coef1</span><span class="p">,</span> <span class="n">coef2</span><span class="p">,</span> <span class="n">topology</span><span class="p">,</span> <span class="n">nepoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Train the neural network model using particle swarm optimization method</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>dataset</strong> (list or np.array):
+a list of tuples in the form (inValues, outValues)</li>
+<li><strong>batchsize</strong> (int (optional)):
+size of minibatches for training</li>
+<li><strong>nepoch: int (optional, default</strong> (1000)):
+maximum number of iterations</li>
+<li><strong>coef0: float (optional, default</strong> (0.4)):
+inertia weight</li>
+<li><strong>coef1: float (optional, default</strong> (2.1)):
+social behaviour parameter</li>
+<li><strong>coef2: float (optional, default</strong> (2.1)):
+cognitive behaviour parameter</li>
+<li><strong>topology: str (optional, default</strong> ('full')):
+topology</li>
+</ul>
+</div>
+
 
                             </div>
                             <div id="Model.save" class="classattr">
