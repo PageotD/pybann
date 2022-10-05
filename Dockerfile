@@ -20,14 +20,12 @@ COPY . /app/
 WORKDIR /app/
 
 # Install required python package using pip3
-RUN pip3 install -r requirements.txt
+RUN pip3 install poetry
+RUN poetry install
 
 # Run pybann
-RUN poetry build 
-RUN pip3 install dist/pybann-0.1.0.tar.gz
+# RUN python3 -m build 
+# RUN pip3 install dist/pybann-0.1.0.tar.gz
 
 # Run tests
-RUN python3 -m unittest tests.tests_activation
-RUN python3 -m unittest tests.tests_layers
-RUN python3 -m unittest tests.tests_model
-RUN python3 -m unittest tests.tests_gradientdescent
+RUN poetry run tox

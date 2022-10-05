@@ -18,36 +18,36 @@ class tests_layers(unittest.TestCase):
         self.assertEqual(testLayer.neurons, 4)
         self.assertEqual(testLayer.label, "")
 
-    def test_addActivation_empty(self):
+    def test_add_activation_empty(self):
 
         testLayer = Layer(neurons=4)  
-        testLayer.addActivation()
+        testLayer.add_activation()
 
         self.assertEqual(testLayer.activation.__name__, "sigmoid")
         self.assertEqual(testLayer.activation(0), 0.5)
     
-    def test_addActivation(self):
+    def test_add_activation(self):
 
         testLayer = Layer(neurons=4)  
-        testLayer.addActivation("tanhyp")
+        testLayer.add_activation("tanhyp")
 
         self.assertEqual(testLayer.activation.__name__, "tanhyp")
         self.assertEqual(testLayer.activation(0), 0.)
 
-    def test_addBiases(self):
+    def test_add_biases(self):
 
         testLayer = Layer(neurons=4) 
 
-        testLayer.addBiases()
+        testLayer.add_biases()
 
         self.assertEqual(len(testLayer.biases), testLayer.neurons)
         self.assertEqual(len(testLayer.biasesUpdate), testLayer.neurons)
 
-    def test_addWeights(self):
+    def test_add_weights(self):
 
         testLayer = Layer(neurons=4) 
 
-        testLayer.addWeights(inputNeurons=8)
+        testLayer.add_weights(inputNeurons=8)
 
         self.assertTupleEqual(np.shape(testLayer.weights), (4, 8))
         self.assertTupleEqual(np.shape(testLayer.weightsUpdate), (4, 8))

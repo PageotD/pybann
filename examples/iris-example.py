@@ -1,14 +1,13 @@
 import numpy as np
-import pickle
 from pybann import Model
 
 #import network
 # Initialize network
-np.random.seed(10)
+#np.random.seed(10)
 network = Model(name='IRIS example')
 
 network.addInput(neurons=4)
-network.addLayer(neurons=12, activation="sigmoid")
+network.addLayer(neurons=9, activation="sigmoid")
 network.addLayer(neurons=3, activation="sigmoid")
 
 network.build()
@@ -36,8 +35,7 @@ with open('data/iris/iris.data', 'r') as f:
                 inDataTest.append(list((inValues, attempted)))
                 train = True
 
-print(len(inData), len(inDataTest))
-network.SGD(dataset=inData,alpha=1.e-3, momentum=0.9, niter=2500)
+network.SGD(dataset=inData, batchsize=50, alpha=1.e-3, momentum=0.9, nepoch=1000)
 
 loss = 0.
 for i in range(len(inDataTest)):
@@ -46,4 +44,10 @@ for i in range(len(inDataTest)):
 
 loss /= float(len(inDataTest))
 
-print(loss, (1-loss)*100)
+print('LOSS:: ', loss, (1-loss)*100)
+
+# Example
+print("EXAMPLE::", inData[42])
+results = network.forward(inValues=inData[42][0])
+print("RESULT::")
+print("* ", results, inData[42][1])

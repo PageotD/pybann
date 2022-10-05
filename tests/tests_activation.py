@@ -61,7 +61,7 @@ class tests_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(Activation.relu(a[i], a=0.1), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i], leak=0.1), o[i], delta=1.e-7)
 
     def test_leayrelu_derivative(self):
 
@@ -73,7 +73,7 @@ class tests_activation(unittest.TestCase):
 
         # Output
         for i in range(len(a)):
-            self.assertAlmostEqual(Activation.relu(a[i], a=0.1, deriv=True), o[i], delta=1.e-7)
+            self.assertAlmostEqual(Activation.relu(a[i], leak=0.1, deriv=True), o[i], delta=1.e-7)
 
     def test_tanhyp(self):
 

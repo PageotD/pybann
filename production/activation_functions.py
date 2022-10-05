@@ -54,8 +54,7 @@ ax.plot(x, Activation.relu(x, deriv=True), color='red', linewidth=1, linestyle='
 ax = axList[5]
 ax.set_ylim(-1.0, 6.0)
 ax.set_yticks(np.linspace(-2.0, 6.0, 5))
-ax.plot(x, Activation.relu(x, a=0.1), color='blue', linewidth=1)
-ax.plot(x, Activation.relu(x, a=0.1, deriv=True), color='red', linewidth=1, linestyle='--')
+ax.plot(x, Activation.relu(x, leak=0.1), color='blue', linewidth=1)
+ax.plot(x, Activation.relu(x, leak=0.1, deriv=True), color='red', linewidth=1, linestyle='--')
 
-
-plt.show()
+plt.savefig("savefig.png")

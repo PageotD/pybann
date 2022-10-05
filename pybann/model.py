@@ -1,22 +1,24 @@
 # Import modules
 import numpy as np
 import pickle
+from tqdm import tqdm
 from pybann import Layer
 from pybann import GradientDescent
 
+
 class Model:
 
-    def __init__(self, name:str="New model")->None:
+    def __init__(self, name: str = "New model") -> None:
         self.name = name
         self.layers = []
 
-    def __repr__(self)->None:
+    def __repr__(self) -> None:
         return "Model(name={})".format(self.name)
 
-    def __str__(self)->None:
+    def __str__(self) -> None:
         pass
 
-    def addInput(self, neurons: int, label: str="")->None:
+    def addInput(self, neurons: int, label: str = "") -> None:
         """
         Add an input layer to the network model.
 
@@ -24,7 +26,7 @@ class Model:
         ----------
         neurons: int
             number of neurons in the input layer
-        label: str (optional)
+        label: str, optional
             label (name) of the layer
 
         Examples
@@ -35,6 +37,7 @@ class Model:
         >>> network.addInput(neurons=4, label="Input layer")
 
         """
+
         try:
             # Assert the number of neurons is at least 1
             assert neurons >= 1
@@ -43,7 +46,8 @@ class Model:
         except AssertionError():
             print("The layer must have at least 1 neuron.")
 
-    def addLayer(self, neurons: int, activation: str="sigmoid", label: str="")->None:
+    def addLayer(self, neurons: int, activation: str = "sigmoid",
+                 label: str = "") -> None:
         """
         Add a layer to the network model.
 
@@ -51,14 +55,14 @@ class Model:
         ----------
         neurons: int
             number of neurons in the layer
-        activation: str (optional, default:"sigmoid)
-            activation function for the layer
-        label: str (optional)
+        activation: str, optional
+            activation function for the layer (default: 'sigmoid')
+        label: str, optional
             label (name) of the layer
-        
+
         Examples
         --------
-        
+
         >>> from pybann import Model
         >>> network = Model()
         >>> network.addInput(neurons=4, label="Input layer")
@@ -69,12 +73,12 @@ class Model:
             # Assert the number of neurons is at least 1
             assert neurons >= 1
             self.layers.append(Layer(neurons, label))
-            self.layers[-1].addActivation(activation)
+            self.layers[-1].add_activation(activation)
 
         except AssertionError():
             print("The layer must have at least 1 neuron.")
 
-    def build(self)->None:
+    def build(self) -> None:
         """
         Build the network model
 
@@ -91,17 +95,18 @@ class Model:
         """
         # build the model
         # Add weights, biaises
-        
-        for i in range(1, len(self.layers)):
+        for i in tqdm(range(1, len(self.layers)),
+                      bar_format='{l_bar}{bar:50}{r_bar}{bar:-50b}',
+                      desc="Building..."):
             # Add biases
-            self.layers[i].addBiases()
+            self.layers[i].add_biases()
             # Add weights
-            self.layers[i].addWeights(self.layers[i-1].neurons)
+            self.layers[i].add_weights(self.layers[i-1].neurons)
 
-    def forward(self, inValues)->np.array:
+    def forward(self, inValues) -> np.array:
         """
         Feed forward the network model
-        
+
         Parameters
         ----------
         inValues: np.array
@@ -122,17 +127,18 @@ class Model:
 
         """
         # Simple feeed forward
-        
+
         # Convert to 2D (n, 1) and transpose for dot product
         inValues = np.atleast_2d(inValues).transpose()
         for i in range(1, len(self.layers)):
             transfer = np.dot(self.layers[i].weights, inValues)
             inValues = self.layers[i].activation(transfer+self.layers[i].biases)
-        
+
         # Flatten output (convert to 1D vector)
         return inValues.flatten()
 
-    def SGD(self, dataset, alpha:float=0.05, niter:int=1000, momentum:float=0.5)->None:
+    def SGD(self, dataset, batchsize=0, alpha: float = 0.05,
+            nepoch: int = 1000, momentum: float = 0.5) -> None:
         """
         Train the neural network model
 
@@ -140,15 +146,18 @@ class Model:
         ----------
         dataset: list or np.array
             a list of tuples in the form (inValues, outValues)
-        niter: int (optional, default: 1000)
-            maximum number of iterations
-        alpha: float (optional, default: 0.05)
-            step for gradient descent
-        momentum: float (optional, default: 0.5)
-            step for the momentum
+        batchsize: int, optional
+            size of minibatches for training
+        nepoch: int, optional
+            maximum number of iterations (default: 1000)
+        alpha: float, optional
+            step for gradient descent (default: 0.05)
+        momentum: float, optional
+            step for the momentum (default: 0.5)
 
         """
-        SGDescent = GradientDescent(dataset, alpha, niter, momentum, self.layers)
+        SGDescent = GradientDescent(dataset, batchsize,
+                                    alpha, nepoch, momentum, self.layers)
         SGDescent.run()
 
     def PSO(self):
@@ -156,14 +165,40 @@ class Model:
         # Need PSO class with options
         pass
 
-    
-    def save(self, filename:str="network.bann")->None:
-        # Save using pickle
+    def save(self, filename: str = "network.bann") -> None:
+        """
+        Save the network model using Pickle
+
+        Parameters
+        ----------
+        filename: str 
+            filename where to save the network model (default: 'network.bann')
+        
+        Example
+        -------
+
+        >>> import numpy as np
+        >>> from pybann import Model
+        >>> network = Model()
+        >>> network.addInput(neurons=4, label="Input layer")
+        >>> network.addLayer(neurons=8, activation="relu", label="Hidden layer")
+        >>> network.addLayer(neurons=3, activation="sigmoid", label="Output layer")
+        >>> network.build()
+        >>> network.save("network_example_save.bann")
+        
+        """
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
-    def load(self, filename:str):
-        # Load a saved train network model
+    def load(self, filename: str):
+        """
+        Load a network model using Pickle
+
+        Parameters
+        ----------
+        filename: str 
+            name of the saved network model (default: 'network.bann')
+        """
         with open(filename, 'rb') as f:
             self = pickle.load(f)
 
