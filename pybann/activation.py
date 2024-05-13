@@ -55,7 +55,14 @@ class Activation:
         >>> sigmoid(a)
         array([0.26894142, 0.5, 0.73105858])
         """
-        result = 1.0 / (1.0 + np.exp(-wsum))
+        if isinstance(wsum, np.ndarray):
+            result = np.array([1.0 / (1.0 + np.exp(-ws)) if ws > 0 else np.exp(ws)/(1+np.exp(ws)) for ws in wsum])
+        else:
+            if wsum < 0:
+                result = np.exp(wsum)/(1+np.exp(wsum))
+            else:
+                result = 1.0 / (1.0 + np.exp(-wsum))
+
         if not deriv:
             return result
 
