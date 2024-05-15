@@ -21,6 +21,10 @@ class Activation:
         pass
 
     @staticmethod
+    def binary(wsum: Union[float, np.array], deriv: bool = False) -> Union[float, np.array]:
+        pass
+    
+    @staticmethod
     def sigmoid(wsum: Union[float, np.array], deriv: bool = False) -> Union[float, np.array]:
         """sigmoid
 

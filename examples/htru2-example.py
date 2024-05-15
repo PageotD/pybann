@@ -9,6 +9,7 @@ network = Model(name='IRIS example')
 network.addInput(neurons=8)
 network.addLayer(neurons=16, activation="sigmoid")
 network.addLayer(neurons=16, activation="sigmoid")
+network.addLayer(neurons=16, activation="sigmoid")
 network.addLayer(neurons=1, activation="sigmoid")
 
 network.build()
@@ -30,7 +31,7 @@ with open('data/htru2/HTRU_2.data', 'r') as f:
                 inDataTest.append(list((inValues, float(line[-1]))))
                 train = True
 
-network.SGD(dataset=inData, batchsize=500, alpha=1.e-3, momentum=0.90, nepoch=2000)
+network.SGD(dataset=inData, batchsize=50, alpha=1.e-3, momentum=0.2, nepoch=5000)
 
 loss = 0.
 for i in range(len(inDataTest)):
