@@ -28,14 +28,27 @@ def test_tanh_derivative():
     expected = 1 - np.tanh(x)**2
     assert np.allclose(Activation.tanh_derivative(x), expected)
 
-# def test_softmax():
-#     x = np.array([1, 2, 3])
-#     result = Activation.softmax(x)
-#     assert np.isclose(np.sum(result), 1)
-#     assert np.all(result > 0)
+def test_softmax():
+    x = np.array([1, 2, 3])
+    result = Activation.softmax(x)
+    assert np.isclose(np.sum(result), 1)
+    assert np.all(result > 0)
 
-# def test_softmax_derivative():
-#     x = np.array([1, 2, 3])
-#     result = Activation.softmax_derivative(x)
-#     assert np.all(result > 0)
-#     assert np.all(result < 1)
+def test_softmax_derivative():
+    x = np.array([1.0, 2.0, 3.0])
+    
+    # Compute the Jacobian numerically
+    epsilon = 1e-7
+    numerical_jacobian = np.zeros((3, 3))
+    for i in range(3):
+        x_plus = x.copy()
+        x_plus[i] += epsilon
+        x_minus = x.copy()
+        x_minus[i] -= epsilon
+        numerical_jacobian[:, i] = (Activation.softmax(x_plus) - Activation.softmax(x_minus)) / (2 * epsilon)
+    
+    # Compute the Jacobian using our implementation
+    analytical_jacobian = Activation.softmax_derivative(x)
+    
+    # Check if they are close
+    assert np.allclose(numerical_jacobian, analytical_jacobian, atol=1e-5)

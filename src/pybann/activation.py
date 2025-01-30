@@ -155,7 +155,18 @@ class Activation:
 
     @staticmethod
     def softmax_derivative(x):
-        # Note: This is a simplified version. The actual Jacobian is more complex.
-        # s = Activation.softmax(x)
-        # return s * (1 - s)
-        NotImplementedError
+        """
+        Apply the derivative of the softmax activation functions to the input values.
+        
+        Parameters
+        ----------
+        x : float or numpy array
+            input value(s)
+        
+        Returns
+        -------
+        result : float or np.array
+            the value of the function at x
+        """
+        s = Activation.softmax(x)
+        return s * (np.eye(s.shape[-1]) - s[..., np.newaxis])
