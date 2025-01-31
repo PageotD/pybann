@@ -22,6 +22,7 @@ class Dense(Layer):
 
     def forward(self, input):
         return np.dot(self.weights, input) + self.bias
+        #return self.weights @ input + self.bias //equivalent
     
     def backward(self, output_gradient, learning_rate):
         weights_gradient = np.dot(self.input.T, output_gradient)
@@ -36,12 +37,12 @@ class ActivationLayer(Layer):
 
     def __init__(self, activation):
         super().__init__()
-        self.activation = activation
+        self.activation, self.derivative = Activation.get_activation(activation)
 
     def forward(self, input):
         self.input = input
         return self.activation(input)
     
     def backward(self, output_gradient, learning_rate):
-        return np.multiply(output_gradient, self.activation.derivative(self.input))
+        return np.multiply(output_gradient, self.derivative(self.input))
     

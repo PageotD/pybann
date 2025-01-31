@@ -26,7 +26,7 @@ def test_dense_layer_backward():
     assert input_gradient.shape == input_data.shape
 
 def test_activation_layer_sigmoid():
-    layer = ActivationLayer(Activation.sigmoid)
+    layer = ActivationLayer("sigmoid")
     input_data = np.array([-1, 0, 1])
     output = layer.forward(input_data)
     assert np.allclose(output, Activation.sigmoid(input_data))

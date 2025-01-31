@@ -2,6 +2,9 @@ import pytest
 import numpy as np
 from pybann.activation import Activation
 
+def test_get_activation():
+    assert Activation.get_activation("sigmoid") == (Activation.sigmoid, Activation.sigmoid_derivative)
+    
 def test_sigmoid():
     assert np.isclose(Activation.sigmoid(0), 0.5)
     assert np.isclose(Activation.sigmoid(100), 1)

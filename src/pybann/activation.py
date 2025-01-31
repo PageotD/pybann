@@ -6,12 +6,15 @@ This module provides activation functions and their derivatives.
 """
 import numpy as np
 
+
 class Activation:
     """
     This class provides activation functions and their derivatives.
     
     Attributes
     ----------
+    get_activation : function
+        Returns the activation function and its derivative.
     sigmoid : function
         The sigmoid activation function.
     sigmoid_derivative : function
@@ -30,6 +33,29 @@ class Activation:
         The derivative of the softmax activation function.
     """
 
+    @staticmethod
+    def get_activation(name):
+        """
+        Returns the activation function and its derivative.
+        
+        Parameters
+        ----------
+        name : str
+            name of the activation function
+        
+        Returns
+        -------
+        result : tuple
+            the activation function and its derivative
+        """
+        activations = {
+            "sigmoid": (Activation.sigmoid, Activation.sigmoid_derivative),
+            "relu": (Activation.relu, Activation.relu_derivative),
+            "tanh": (Activation.tanh, Activation.tanh_derivative),
+            "softmax": (Activation.softmax, Activation.softmax_derivative),
+        }
+        return activations[name]
+    
     @staticmethod
     def sigmoid(x):
         """
