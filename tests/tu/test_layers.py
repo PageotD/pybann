@@ -16,6 +16,28 @@ def test_dense_layer_forward():
     output = layer.forward(input_data)
     assert output.shape == (output_size,)
 
+def test_activation_layer_sigmoid():
+    layer = ActivationLayer("sigmoid")
+    input_data = np.array([-1, 0, 1])
+    output = layer.forward(input_data)
+    assert np.allclose(output, Activation.sigmoid(input_data))
+
+def test_activation_layer_relu():
+    layer = ActivationLayer("relu")
+    input_data = np.array([-1, 0, 1])
+    output = layer.forward(input_data)
+    assert np.allclose(output, Activation.relu(input_data))
+
+def test_dense_activation_combination():
+    dense = Dense(3, 2)
+    activation = ActivationLayer("sigmoid")
+    input_data = np.array([1, 2, 3])
+    dense_output = dense.forward(input_data)
+    final_output = activation.forward(dense_output)
+    assert final_output.shape == (2,)
+    assert np.all((final_output >= 0) & (final_output <= 1))
+
+
 def test_dense_layer_backward():
     input_size, output_size = 3, 2
     layer = Dense(input_size, output_size)
@@ -25,18 +47,6 @@ def test_dense_layer_backward():
     input_gradient = layer.backward(output_gradient, learning_rate=0.01)
     assert input_gradient.shape == input_data.shape
 
-def test_activation_layer_sigmoid():
-    layer = ActivationLayer("sigmoid")
-    input_data = np.array([-1, 0, 1])
-    output = layer.forward(input_data)
-    assert np.allclose(output, Activation.sigmoid(input_data))
-
-def test_activation_layer_relu():
-    layer = ActivationLayer(Activation.relu)
-    input_data = np.array([-1, 0, 1])
-    output = layer.forward(input_data)
-    assert np.allclose(output, Activation.relu(input_data))
-
 def test_activation_layer_backward():
     layer = ActivationLayer(Activation.sigmoid)
     input_data = np.array([-1, 0, 1])
@@ -45,13 +55,3 @@ def test_activation_layer_backward():
     input_gradient = layer.backward(output_gradient, learning_rate=0.01)
     expected_gradient = output_gradient * Activation.sigmoid_derivative(input_data)
     assert np.allclose(input_gradient, expected_gradient)
-
-def test_dense_activation_combination():
-    dense = Dense(3, 2)
-    activation = ActivationLayer(Activation.sigmoid)
-    input_data = np.array([[1, 2, 3]])
-    dense_output = dense.forward(input_data)
-    final_output = activation.forward(dense_output)
-    assert final_output.shape == (1, 2)
-    assert np.all((final_output >= 0) & (final_output <= 1))
-
